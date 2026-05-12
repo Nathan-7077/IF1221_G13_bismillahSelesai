@@ -5,10 +5,27 @@
 :- dynamic(discardPile/1).
 :- dynamic(currentPlayer/1).
 :- dynamic(gameStarted/0).
+:- dynamic(tempFind/1).
 
-/*Untuk mengambil kartu*/
-findKartu(Temp, Goal, List):-
-    findall(Temp, Goal, List).
+/*Mengambil Kartu dengan spesifikasi tertentu*/
+findKartu(Template, Goal, List) :-
+    retractall(tempFind(_)),
+    (
+        Goal,
+        assertz(tempFind(Template)),
+        fail;
+        true
+    ),
+    ambilHasil(List),
+    retractall(tempFind(_)).
+ambilHasil(List):-
+    ambilHasilHelper([], List).
+
+ambilHasilHelper(Acc, List):-
+    retract(tempFind(X)), !,
+    append(Acc, [X], NewAcc),
+    ambilHasilHelper(NewAcc, List).
+ambilHasilHelper(List, List).
 
 /*Mulai Game*/
 startGame:-
