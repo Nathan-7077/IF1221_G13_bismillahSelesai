@@ -121,37 +121,4 @@ inisialiasiDiscardPile:-
     assertz(discardPile([K])),
     K= kartu(Warna, Jenis),
     write('Kartu discard top: '), write(Warna), write('-'), write(Jenis), nl.
-
-/*Validasi Kartu*/
-/*Aturan-Aturan Umum*/
-kartuValid(kartu(wild, drawFour), kartu(wild, drawFour)):- !, fail.
-kartuValid(kartu(_, drawTwo), kartu(_, drawTwo)):- !, fail.
-kartuValid(kartu(Color,_), kartu(Color,_)):- !.
-kartuValid(kartu(_, Type), kartu(_, Type)):-
-    Type \= wild,
-    Type \= drawFour, !.
-kartuValid(kartu(wild,_), _):- !.
-
-/*Aturan Khusus untuk wild draw four*/
-cekWDF(Hand, kartu(CurrentColor, CurrentType)):-
-    \+(
-        member(kartu(Color, Type), Hand),
-        Color \= wild,
-        (
-            Color=CurrentColor;
-            Type=CurrentType
-        )
-    ).
-/*Pengecekan pakai predicate yang sudah dibuat (kartuValid sama cekWDF)*/
-bisaDimainkan(Player, Card):-
-    currentPlayer(Player),
-    hand(Player, Hand),
-    member(Card, Hand),
-    discardPile([Top|_]),
-    kartuValid(Card, Top),
-    (
-        Card=kartu(wild, drawFour)->
-        cekWDF(Hand, Top);
-        true
-    ).
     
