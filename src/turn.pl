@@ -1,33 +1,27 @@
 :- include('startGame.pl').
-playable(kartu(wild,_), _).
-playable(kartu(Color,_), kartu(Color,_)).
-playable(kartu(_, Type), kartu(_, Type)):-
+kartuValid(kartu(wild,_), _).
+kartuValid(kartu(Color,_), kartu(Color,_)).
+kartuValid(kartu(_, Type), kartu(_, Type)) :-
     Type \= wild,
     Type \= draw_four.
-kartuValid(kartu(wild, draw_four), Top):-
-    playable(kartu(wild, draw_four), Top), !.
-kartuValid(kartu(_, draw_two), kartu(_, draw_two)) :- !, fail.
-kartuValid(kartu(Color,_), kartu(Color,_)):- !.
-kartuValid(kartu(_, Type), kartu(_, Type)):-
-    Type \= wild,
-    Type \= draw_four, !.
-kartuValid(kartu(wild,_), _):- !.
 cekWDF(Hand, Top) :-
     \+ (
         member(Card, Hand),
-        playable(Card, Top)
+        Card \= kartu(wild, draw_four),
+        kartuValid(Card, Top)
     ).
 bisaDimainkan(Player, Card):-
     currentPlayer(Player),
     hand(Player, Hand),
     member(Card, Hand),
     discardPile([Top|_]),
-    kartuValid(Card, Top),
     (
         Card = kartu(wild, draw_four) ->
-            cekWDF(Hand, Top);
-            true
+            cekWDF(Hand, Top)
+        ;
+            kartuValid(Card, Top)
     ).
+    
 printUrutan([]).
 printUrutan([H|[]]) :-
     write(H), printUrutan(T).
