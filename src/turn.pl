@@ -1,4 +1,4 @@
-:- include('fakta.pl').
+:- include('card.pl').
 :- include('startGame.pl').
 kartuValid(kartu(wild, drawFour), kartu(wild, drawFour)):- !, fail.
 kartuValid(kartu(_, drawTwo), kartu(_, drawTwo)):- !, fail.
