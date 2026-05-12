@@ -17,8 +17,7 @@ bisaDimainkan(Player, Card):-
     discardPile([Top|_]),
     (
         Card = kartu(wild, draw_four) ->
-            cekWDF(Hand, Top)
-        ;
+            cekWDF(Hand, Top);
             kartuValid(Card, Top)
     ).
     
