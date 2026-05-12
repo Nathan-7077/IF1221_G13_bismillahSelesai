@@ -113,7 +113,7 @@ ruleDistribusi([P|Ps], Deck):-
     ruleDistribusi(Ps, Sisa).
 
 /*Discard Pile*/
-inisialiasiDiscardPile:-
+inisialisasiDiscardPile:-
     findKartu(kartu(W,J), (warna(W), jenis(J), integer(J)), Numerik),
     length(Numerik, Len),
     random(0,Len,Indeks),
