@@ -1,5 +1,5 @@
-:- include('fakta.pl').
-:- include('rule.pl').
+:- include('card.pl').
+:- include('turn.pl').
 :- include('startGame.pl').
 
 :- initialization(main).
