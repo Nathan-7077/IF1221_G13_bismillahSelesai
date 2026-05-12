@@ -1,22 +1,22 @@
 :- include('startGame.pl').
-kartuValid(kartu(wild, drawFour), kartu(wild, drawFour)):- !, fail.
-kartuValid(kartu(_, drawTwo), kartu(_, drawTwo)):- !, fail.
+playable(kartu(wild,_), _).
+playable(kartu(Color,_), kartu(Color,_)).
+playable(kartu(_, Type), kartu(_, Type)):-
+    Type \= wild,
+    Type \= draw_four.
+kartuValid(kartu(wild, draw_four), Top):-
+    playable(kartu(wild, draw_four), Top), !.
+kartuValid(kartu(_, draw_two), kartu(_, draw_two)) :- !, fail.
 kartuValid(kartu(Color,_), kartu(Color,_)):- !.
 kartuValid(kartu(_, Type), kartu(_, Type)):-
     Type \= wild,
-    Type \= drawFour, !.
+    Type \= draw_four, !.
 kartuValid(kartu(wild,_), _):- !.
-
-cekWDF(Hand, kartu(CurrentColor, CurrentType)):-
-    \+(
-        member(kartu(Color, Type), Hand),
-        Color \= wild,
-        (
-            Color=CurrentColor;
-            Type=CurrentType
-        )
+cekWDF(Hand, Top) :-
+    \+ (
+        member(Card, Hand),
+        playable(Card, Top)
     ).
-    
 bisaDimainkan(Player, Card):-
     currentPlayer(Player),
     hand(Player, Hand),
@@ -24,11 +24,10 @@ bisaDimainkan(Player, Card):-
     discardPile([Top|_]),
     kartuValid(Card, Top),
     (
-        Card=kartu(wild, drawFour)->
-        cekWDF(Hand, Top);
-        true
+        Card = kartu(wild, draw_four) ->
+            cekWDF(Hand, Top);
+            true
     ).
-
 printUrutan([]).
 printUrutan([H|[]]) :-
     write(H), printUrutan(T).
