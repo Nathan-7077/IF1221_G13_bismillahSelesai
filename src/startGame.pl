@@ -37,7 +37,7 @@ startGame:-
     inisialisasiPlayer,
     distribusiKartu,
     write('Setiap Pemain mendapatkan 7 kartu acak'), nl,
-    inisialiasiDiscardPile,
+    inisialisasiDiscardPile,
     assertz(gameStarted),
     listPlayer([First|_]),
     assertz(currentPlayer(First)),
