@@ -2,7 +2,7 @@ warna(merah).
 warna(biru).
 warna(hijau).
 warna(kuning).
-jenis(0).
+jenis(10).
 jenis(1).
 jenis(2).
 jenis(3).
