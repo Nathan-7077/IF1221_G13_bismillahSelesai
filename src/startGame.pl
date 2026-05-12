@@ -1,4 +1,4 @@
-:- include('fakta.pl').
+:- include('card.pl').
 :- dynamic(player/1).
 :- dynamic(listPlayer/1).
 :- dynamic(hand/2).
