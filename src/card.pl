@@ -36,21 +36,3 @@ kartu(Warna, Jenis) :-
 % kartu wild
 kartu(hitam, wild).
 kartu(hitam, wild_draw_four).
-
-
-/* validasi kartu */
-
-bisa_dimainkan(
-    kartu(Warna, _),
-    kartu(Warna, _)
-).
-
-bisa_dimainkan(
-    kartu(_, Jenis),
-    kartu(_, Jenis)
-).
-
-bisa_dimainkan(
-    kartu(hitam, _),
-    _
-).
