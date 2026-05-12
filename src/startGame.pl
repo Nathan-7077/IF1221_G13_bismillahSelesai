@@ -142,7 +142,7 @@ cekWDF(Hand, kartu(CurrentColor, CurrentType)):-
             Type=CurrentType
         )
     ).
-
+/*Pengecekan pakai predicate yang sudah dibuat (kartuValid sama cekWDF)*/
 bisaDimainkan(Player, Card):-
     currentPlayer(Player),
     hand(Player, Hand),
