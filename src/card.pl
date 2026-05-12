@@ -1,29 +1,56 @@
 /* data dasar */
 
-warna([merah, kuning, hijau, biru]).
+warna(merah).
+warna(kuning).
+warna(hijau).
+warna(biru).
 
-jenis_aksi([skip, reverse, draw_two]).
-jenis_wild([wild, wild_draw_four]).
+jenis(skip).
+jenis(reverse).
+jenis(draw_two).
 
-angka([0,1,2,3,4,5,6,7,8,9]).
+jenis(wild).
+jenis(wild_draw_four).
+
+jenis(0).
+jenis(1).
+jenis(2).
+jenis(3).
+jenis(4).
+jenis(5).
+jenis(6).
+jenis(7).
+jenis(8).
+jenis(9).
 
 
 /* rule kartu */
 
-kartu(kartu(Warna, angka, Nilai)) :-
-    warna(ListWarna),
-    member(Warna, ListWarna),
+% kartu biasa & aksi
+kartu(Warna, Jenis) :-
+    warna(Warna),
+    jenis(Jenis),
+    Jenis \= wild,
+    Jenis \= wild_draw_four.
 
-    angka(ListAngka),
-    member(Nilai, ListAngka).
+% kartu wild
+kartu(hitam, wild).
+kartu(hitam, wild_draw_four).
 
-kartu(kartu(Warna, Jenis, none)) :-
-    warna(ListWarna),
-    member(Warna, ListWarna),
 
-    jenis_aksi(ListJenis),
-    member(Jenis, ListJenis).
+/* validasi kartu */
 
-kartu(kartu(hitam, Jenis, none)) :-
-    jenis_wild(ListWild),
-    member(Jenis, ListWild).
+bisa_dimainkan(
+    kartu(Warna, _),
+    kartu(Warna, _)
+).
+
+bisa_dimainkan(
+    kartu(_, Jenis),
+    kartu(_, Jenis)
+).
+
+bisa_dimainkan(
+    kartu(hitam, _),
+    _
+).
