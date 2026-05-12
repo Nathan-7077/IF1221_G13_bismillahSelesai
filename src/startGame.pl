@@ -20,7 +20,6 @@ findKartu(Template, Goal, List) :-
     retractall(tempFind(_)).
 ambilHasil(List):-
     ambilHasilHelper([], List).
-
 ambilHasilHelper(Acc, List):-
     retract(tempFind(X)), !,
     append(Acc, [X], NewAcc),
