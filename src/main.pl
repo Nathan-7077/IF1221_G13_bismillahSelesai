@@ -1,6 +1,5 @@
 :- include('card.pl').
 :- include('player.pl').
-:- include('utils.pl').
 :- include('gameLogic.pl').
 :- include('startGame.pl').
 :- include('turn.pl').
