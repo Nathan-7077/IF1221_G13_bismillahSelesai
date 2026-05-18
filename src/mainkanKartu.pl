@@ -1,9 +1,9 @@
 :- include('startGame.pl').
 :- include('handleEffect.pl').
-:- dynamic(mainkanKartu/2).
+:- include('main.pl').
 
-ambilDariDeck(0, [H|], Kartu).
-ambilDariDeck(NoKartu, [|T], Temp) :-
+ambilDariHand(0, [H|], Kartu).
+ambilDariHand(NoKartu, [|T], Temp) :-
     NoKartu > 0,
     N1 is NoKartu - 1,
     ambilDariDeck(N1, T, Temp).
@@ -33,15 +33,27 @@ efekJenis(Y) :-
 
 efekJenis(_).
 
+jadiTop(NewTop) :-
+    discardPile(OldList),
+    retract(discardPile(OldList)),
+    NewList = [NewTop|OldList],
+    assertz(discardPile(NewList)).
+
+buangDariHand :-
+    
+
 mainkanKartu(NoKartu):-
-    ReakNoKartu is NoKartu - 1,
     currentPlayer(Player),
-    ambilDariDeck(RealNoKartu, Deck, Kartu),
-    bisaDimainkan(Kartu),
-    kartu(X, Y) = Kartu,
-    write(Player), write('memainkan kartu: '), write(X), write('-'), write(Y), 
-    efekJenis(Y),
+    cards(Player, Hand),
+    ambilDariHand(NoKartu, Hand, kartu(Warna, Jenis)),
+    (bisaDimainkan(Player, kartu(Warna, Jenis))->
+    write(Player), write('memainkan kartu: '), write(Warna), write('-'), write(Jenis), nl,
+    efekJenis(Jenis),
+    jadiTop(kartu(Warna, Jenis)),
+    buangDariHand(kartu(Warna, Jenis)),
     passTurn,
-    currentPlayer(Player),
-    write('Giliran '), write(Player). 
+    currentPlayer(NextPlayer),
+    write('Giliran '), write(Player), nl
+    ;
+    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl). 
 
