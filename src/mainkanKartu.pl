@@ -39,8 +39,12 @@ jadiTop(NewTop) :-
     NewList = [NewTop|OldList],
     assertz(discardPile(NewList)).
 
-buangDariHand :-
-
+buangDariHand(Deleted) :-
+    currentPlayer(Player),
+    cards(Player, Hand),
+    delete(Hand, Deleted, NewHand),
+    retract(cards(Player, Hand)),
+    assertz(cards(Player, NewHand)).
 
 mainkanKartu(NoKartu):-
     currentPlayer(Player),
@@ -53,7 +57,7 @@ mainkanKartu(NoKartu):-
     buangDariHand(kartu(Warna, Jenis)),
     passTurn,
     currentPlayer(NextPlayer),
-    write('Giliran '), write(Player), nl
+    write('Giliran '), write(NextPlayer), nl
     ;
     write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl). 
 
