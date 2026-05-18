@@ -2,11 +2,11 @@
 :- include('handleEffect.pl').
 :- include('main.pl').
 
-ambilDariHand(0, [H|], Kartu).
-ambilDariHand(NoKartu, [|T], Temp) :-
-    NoKartu > 0,
+ambilDariHand(1, [H|_], H).
+ambilDariHand(NoKartu, [_|T], Temp) :-
+    NoKartu > 1,
     N1 is NoKartu - 1,
-    ambilDariDeck(N1, T, Temp).
+    ambilDariHand(N1, T, Temp).
 
 efekJenis(Y) :-
     Y == reverse, 
@@ -40,7 +40,7 @@ jadiTop(NewTop) :-
     assertz(discardPile(NewList)).
 
 buangDariHand :-
-    
+
 
 mainkanKartu(NoKartu):-
     currentPlayer(Player),
