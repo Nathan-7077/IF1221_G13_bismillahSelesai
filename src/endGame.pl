@@ -1,0 +1,1 @@
+:- dynamic(blabla/1).
