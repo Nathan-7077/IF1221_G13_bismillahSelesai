@@ -15,8 +15,9 @@ tangkapPlayer(nama):-
 /* Predikat penunjang */
 cekTangkap(nama):-
 	/* ngecek apakah kartu yang ada di tangan tinggal 1 */
-	
+	cekKartuTinggalSatu(Nama),
 	/* kalau misal bener tinggal 1, ngecek bener ngga playernya belum bilang UNI */
+	cekPemainNggaBilangUni(Nama).
 
 cekKartuTinggalSatu(Nama):-
   kumpulSemuaKartuPemain(Nama, ListKartu),
