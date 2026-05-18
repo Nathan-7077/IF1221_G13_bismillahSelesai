@@ -1,1 +1,12 @@
-
+mainkanKartudanUni(Warna, Jenis):-
+	(
+		bisaDimainkan(Warna, Jenis)
+		->
+		retract(cards(P,kartu(Warna, Jenis))),
+		/* assert kartu ke tengah -> asserta(discardTop(Warna, Jenis)), */
+		/* ngehandle effect dari kartu -> handleEffect(Warna, Jenis), */
+		write(P),
+		write(' menyerukan UNI!').
+		;
+		write('Kartu tidak bisa dimainkan')
+	).
