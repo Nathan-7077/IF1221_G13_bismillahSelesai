@@ -28,7 +28,7 @@ cekInfo:-
     write(Warna), write('-'), write(Jenis), write('.'), nl,
     nl,
     write('Urutan pemain: '),
-    printPemain
+    printPemain.
     
 
 

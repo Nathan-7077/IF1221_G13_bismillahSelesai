@@ -32,9 +32,9 @@ wildJenis(mimic).
 
 % definisi
 
-kartu(Warna,Jenis) :-
+kartu(Warna,Jenis):-
     warna(Warna),
     jenis(Jenis).
 
-kartu(hitam,Jenis) :-
+kartu(hitam,Jenis):-
     wildJenis(Jenis).
