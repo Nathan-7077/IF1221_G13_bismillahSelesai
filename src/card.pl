@@ -28,7 +28,7 @@ jenis(draw_two).
 
 wildJenis(wild).
 wildJenis(wild_draw_four).
-wildJenis(mimic).
+% wildJenis(mimic).
 
 % definisi
 
