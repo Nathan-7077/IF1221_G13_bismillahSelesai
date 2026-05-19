@@ -1,5 +1,6 @@
 :- include('utils.pl').
 :- include('player.pl').
+:- include('card.pl').
 
 :- dynamic(discardPile/1).
 :- dynamic(gameStarted/0).
@@ -105,8 +106,7 @@ inputPlayersLoop(I,N):-
             write('Nama masih sudah dipakai!'),
             nl,
             inputPlayersLoop(I,N),
-            !,
-            true
+            !
             ;
             assertz(player(NewName)),
             assertz(cards(NewName,[])),
@@ -156,37 +156,38 @@ writeList([H|T]):-
 
 /* Distribusi kartu */
 distribusiKartu:-
+    distribusiPlayer(1).
+distribusiPlayer(I):-
+    numPlayers(N),
+    I>N,!.
+distribusiPlayer(I):-
+    playerOrder(I,P),
     findKartu(
         kartu(W,J),
         kartu(W,J),
-        Deck
+        SemuaKartu
     ),
-    shuffle(Deck,Shuffled),
-
-    distribusiPlayer(1,Shuffled).
-
-distribusiPlayer(I,_):-
-    numPlayers(N),
-    I>N,!.
-
-distribusiPlayer(I,Deck):-
-    playerOrder(I,P),
+    shuffle(SemuaKartu,Shuffled),
+    
     length(Hand,7),
-    append(Hand,Sisa,Deck),
+    append(Hand,_,Shuffled),
+
     retract(cards(P,_)),
     assertz(cards(P,Hand)),
 
     I2 is I+1,
-    distribusiPlayer(I2,Sisa).
-
+    distribusiPlayer(I2).
 /* Discard pile */
 inisialisasiDiscardPile :-
     findKartu(
-        kartu(W,J),
-        kartu(W,J),
-        Deck
+    kartu(W,J),
+    (
+        warna(W),
+        jenis(J),
+        integer(J)
     ),
-    Deck \=[],
+    Deck
+    ),
     getLength(Deck,Len),
     random(0,Len,Indeks),
     deleteElement(Indeks,Deck,K,_),
