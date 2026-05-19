@@ -1,4 +1,4 @@
-cekdiLoop(Player, [], 0),
+cekdiLoop(Player, [], 0).
 cekdiLoop(Player, [Head|Tail], Length) :-
 	(
 		bisaDimainkan(Player, Head)
