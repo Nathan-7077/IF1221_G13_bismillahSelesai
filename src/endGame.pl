@@ -2,7 +2,6 @@
 
 % tampilan pas endgame
 endGame :-
-    % nyari yang udah abis kartunya
     player(Winner), 
     cards(Winner,[]),
     nl,
@@ -50,14 +49,13 @@ hitungSemuaPoin.
 
 
 % hitung poin
-% yang juara
 hitungPoin([],0).
 
-%yang kalah
 hitungPoin([K|T],Total) :-
     nilaiKartu(K,Nilai),
     hitungPoin(T,Sisa),
     Total is Nilai + Sisa.
+
 
 % nilai tiap kartu
 nilaiKartu(kartu(_,Angka),Angka):-
@@ -72,14 +70,15 @@ nilaiKartu(kartu(hitam,mimic),20).
 
 
 % tampilkan kartu
-
 tampilKartu([]):-
-    write('kartu habis').
+    write('kartu habis'),
+    !.
 
 tampilKartu([kartu(W,J)]) :-
     write(W),
     write('-'),
-    write(J).
+    write(J),
+    !.
 
 tampilKartu([kartu(W,J)|T]) :-
     write(W),
@@ -87,6 +86,7 @@ tampilKartu([kartu(W,J)|T]) :-
     write(J),
     write(' + '),
     tampilKartu(T).
+
 
 % tampilkan ranking
 tampilRanking :-
@@ -104,6 +104,7 @@ urutanPlayer(I) :-
 urutanPlayer(I) :-
     cariPeringkat(I,Pemain),
     finalScore(Pemain,Skor),
+
     write(I),
     write('. '),
     write(Pemain),
@@ -114,6 +115,7 @@ urutanPlayer(I) :-
 
     I2 is I+1,
     urutanPlayer(I2).
+
 
 % cari peringkat pemain
 cariPeringkat(N,Pemain) :-
@@ -126,6 +128,7 @@ cariPeringkat(N,Pemain) :-
     ambilPeringkat(N,Sorted,Pemain).
 
 ambilPeringkat(1,[(_,P)|_],P).
+
 ambilPeringkat(N,[_|T],P) :-
     N1 is N-1,
     ambilPeringkat(N1,T,P).
