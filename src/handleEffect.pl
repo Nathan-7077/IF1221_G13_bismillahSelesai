@@ -1,12 +1,6 @@
 :- include('card.pl').
 :- include('player.pl').
 
-/* balik(List, Hasil) :- 
-    balik(List, [], Hasil).
-
-balik([], B, B).
-balik([H|T], B, Hasil) :- 
-    balik(T, [H|B], Hasil). */
 
 balikUrutan(Max, Max) :-
     playerOrder(Max, Current),
@@ -24,6 +18,8 @@ balikUrutan(Index1, Max) :-
     NextIndex is Index1 + 1,
     balikUrutan(NextIndex, Max).
 
+efekTerakhir([kartu(|Tail], Efek) :-
+    ()
 
 efekReverse :- 
     numPlayers(Max),
@@ -34,14 +30,31 @@ efekSkip :-
     passTurn,
     write('Pemain berikutnya kehilangan giliran'), nl.
 
-% efekDrawTwo :-
+efekDrawTwo :-
+currentPlayer(Player),
+    ambilKartuUmum(Player, 2, _),
+    write('Pemain berikutnya mengambil dua kartu'), nl,
+    passTurn.
 
 efekWild :- 
-    write('Pilih warna kartu yang diinginkan: '), 
+    write('Pilih warna kartu yang diinginkan (hijau/kuning/biru/merah): '), 
     read(WarnaNew), 
     jadiTop(kartu(WarnaNew, _)),
-    write('Kartu paling atas sekarang berwarna '), write(WarnaNew).
+    write('Kartu paling atas sekarang berwarna '), write(WarnaNew), nl.
 
-% efekDrawFour :-
+efekDrawFour :-  
+    currentPlayer(Player),
+    write('Tantang '), write(Player), write(' (Ya/Tidak)? '),
+    read(Konfirmasi),
+    (Konfirmasi == Ya ->
+    tantang
+    ;
+    Konfirmasi == Tidak ->
+    passTurn,
+    currentPlayer(NextPlayer)
+    ambilKartuUmum(NextPlayer, 4, _)).
+
+efekMimic :-
+
 
 

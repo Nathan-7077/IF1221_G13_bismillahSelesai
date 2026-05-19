@@ -1,6 +1,7 @@
 :- include('startGame.pl').
 :- include('handleEffect.pl').
 :- include('main.pl').
+:- include('util.pl').
 
 ambilDariHand(0, [H|_], H).
 ambilDariHand(NoKartu, [_|T], Temp) :-
@@ -15,16 +16,20 @@ efekJenis(Y) :-
     efekReverse,
     ;
     efekSkip), 
+    jadiTop(kartu(Warna, Jenis)),
     !.
 
 efekJenis(Y) :-
     Y == skip, 
     efekSkip,
+    jadiTop(kartu(Warna, Jenis)),
     !.
 
 efekJenis(Y) :-
     Y == draw_two, 
-    efekDrawTwo, !.
+    efekDrawTwo, 
+    jadiTop(kartu(Warna, Jenis)),
+    !.
 
 efekJenis(Y) :-
     Y == wild, 
@@ -34,6 +39,12 @@ efekJenis(Y) :-
     Y == wild_draw_four, 
     efekWild,
     efekDrawFour, !.
+
+efekJenis(Y) :-
+    Y == mimic,
+    efekMimic,
+    efekWild,
+    !.
 
 efekJenis(_).
 
@@ -63,9 +74,8 @@ mainkanKartu(NoKartu):-
     ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
     (bisaDimainkan(Player, kartu(Warna, Jenis))->
     write(Player), write('memainkan kartu: '), write(Warna), write('-'), write(Jenis), nl,
-    efekJenis(Jenis),
-    jadiTop(kartu(Warna, Jenis)),
     buangDariHand(NoKartuRill),
+    efekJenis(Jenis),
     passTurn,
     currentPlayer(NextPlayer),
     write('Giliran '), write(NextPlayer), nl
