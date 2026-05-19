@@ -160,3 +160,56 @@ mainkanKartu(NoKartu):-
     write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl,
     !,
     fail).
+
+/*tantang*/
+cekdiLoop(_, []).
+cekdiLoop(Player, [Head|Tail]) :-
+	\+ bisaDimainkan(Player, Head),
+	cekdiLoop(Player, Tail).
+
+getLength([], 0).
+getLength([_|Tail], Length) :-
+	getLength(Tail, TailLength),
+	Length is TailLength + 1.
+
+cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
+	cards(Player, Hand),
+	getLength(Hand, Length),
+	( 
+		cekdiLoop(Player, Hand)
+			-> Hasil = 1
+			; Hasil = 0
+	).
+
+tantang:-
+	write('Tantangan dilakukan!'),
+	nl,
+	write('Memeriksa kartu '),
+	currentPlayer(Player),
+	write(Player),
+	write('...'),
+	nl,
+
+	cekGaAdaKartuYangBisaDimainin(Player, Hasil),
+
+	(
+		Hasil = 1
+		->
+		write('Tantangan gagal. '),
+		nl,
+		passTurn,
+		currentPlayer(NextPlayer),
+		ambilKartuUmum(NextPlayer, 6, _),
+		write(NextPlayer),
+		write(' mendapatkan 6 kartu secara acak'),
+		nl
+		;
+		write('Tantangan berhasil. '),
+		nl,
+		ambilKartuUmum(Player, 4, _),
+		write(Player),
+		write(' mendapatkan 4 kartu secara acak'),
+		passTurn,
+		currentPlayer(NextPlayer),
+		nl
+	).
