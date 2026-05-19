@@ -28,9 +28,6 @@ ambilKartuUmum(Player, N, KartuNew):-
     retract(cards(Player, HandPrev)),
     assertz(cards(Player, HandAfter)).
 
-jumlahAmbil(kartu(hitam, wild_draw_four), 4):-!.
-jumlahAmbil(kartu(_, draw_two), 2):-!.
-jumlahAmbil(_, 1).
 
 tambahKartu(Hand, [], Hand):-!.
 tambahKartu(Hand, [Head|Tail], Hasil):-
