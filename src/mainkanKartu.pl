@@ -9,14 +9,18 @@ ambilDariHand(NoKartu, [_|T], Temp) :-
     ambilDariHand(N1, T, Temp).
 
 efekJenis(Y) :-
-    Y == reverse, 
+    Y == reverse,
+    numPlayers(Max), 
+    (Max > 2 ->
     efekReverse,
-    write('Urutan pemain dibalik!'), !.
+    ;
+    efekSkip), 
+    !.
 
 efekJenis(Y) :-
     Y == skip, 
     efekSkip,
-    write('Pemain berikutnya kehilangan giliran'), !.
+    !.
 
 efekJenis(Y) :-
     Y == draw_two, 

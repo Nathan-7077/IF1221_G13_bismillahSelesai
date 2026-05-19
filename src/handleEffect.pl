@@ -27,12 +27,14 @@ balikUrutan(Index1, Max) :-
 
 efekReverse :- 
     numPlayers(Max),
-    balikUrutan(1, Max).
+    balikUrutan(1, Max),
+    write('Urutan pemain dibalik!'), nl.
 
 efekSkip :- 
-    passTurn.
+    passTurn,
+    write('Pemain berikutnya kehilangan giliran'), nl.
 
-efekDrawTwo :-
+% efekDrawTwo :-
 
 efekWild :- 
     write('Pilih warna kartu yang diinginkan: '), 
@@ -40,6 +42,6 @@ efekWild :-
     jadiTop(kartu(WarnaNew, _)),
     write('Kartu paling atas sekarang berwarna '), write(WarnaNew).
 
-efekDrawFour :-
+% efekDrawFour :-
 
 
