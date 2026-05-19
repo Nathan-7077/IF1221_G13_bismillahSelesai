@@ -23,7 +23,7 @@ ambilHasil(List):-
 
 ambilHasilHelper(Acc,List):-
     retract(tempFind(X)), !,
-    appendElement(Acc,[X],NewAcc),
+    append(Acc,[X],NewAcc),
     ambilHasilHelper(NewAcc,List).
 ambilHasilHelper(List,List).
 
@@ -85,35 +85,40 @@ inputPlayersValid:-
     inputPlayersLoop(1,N).
 
 inputPlayersLoop(I,N):-
-    I>N,!.
+    I>N,
+    !.
 
 inputPlayersLoop(I,N):-
     write('Masukkan nama pemain '),
     write(I),
     write(': '),
     read(Name),
+
     (
         player(Name)
         ->
         write('Nama sudah digunakan. Masukkan nama lain: '),
-
         read(NewName),
-
-        assertz(player(NewName)),
-        assertz(cards(NewName,[])),
-        assertz(points(NewName,0))
+        (
+            player(NewName)
+            ->
+            write('Nama masih sudah dipakai!'),
+            nl,
+            inputPlayersLoop(I,N),
+            !,
+            true
+            ;
+            assertz(player(NewName)),
+            assertz(cards(NewName,[])),
+            assertz(points(NewName,0))
+        )
         ;
-
         assertz(player(Name)),
         assertz(cards(Name,[])),
         assertz(points(Name,0))
     ),
-
     I2 is I+1,
-
     inputPlayersLoop(I2,N).
-
-
 
 /* Shuffle pemain */
 shufflePlayers:-
@@ -121,7 +126,7 @@ shufflePlayers:-
     shuffle(Players,Shuffled),
     assignPlayerOrder(Shuffled,1),
 
-    write(nl),
+    nl,
     write('Urutan pemain: '),
     writeList(Shuffled),
     write('.'),
@@ -166,7 +171,7 @@ distribusiPlayer(I,_):-
 
 distribusiPlayer(I,Deck):-
     playerOrder(I,P),
-    getLength(Hand,7),
+    length(Hand,7),
     append(Hand,Sisa,Deck),
     retract(cards(P,_)),
     assertz(cards(P,Hand)),
