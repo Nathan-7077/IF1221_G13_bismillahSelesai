@@ -140,6 +140,7 @@ mainkanKartu(NoKartu):-
     write(Player), write(' memainkan kartu: '), write(Warna), write('-'), write(Jenis), nl,
     jadiTop(kartu(Warna, Jenis)),
     buangDariHand(NoKartuRill),
+
     cards(Player, NewHand),
     (
         NewHand = []
@@ -149,10 +150,13 @@ mainkanKartu(NoKartu):-
         efekJenis(Jenis),
         passTurn,
         currentPlayer(NextPlayer),
-        write('Giliran '), write(NextPlayer), nl
-    )
+        write('Giliran '),
+        write(NextPlayer),
+        write('.'),
+        nl,nl
+    ),
+    !
     ;
-    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl, 
+    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl,
     !,
     fail).
-
