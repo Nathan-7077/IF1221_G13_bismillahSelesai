@@ -2,9 +2,9 @@
 :- include('handleEffect.pl').
 :- include('main.pl').
 
-ambilDariHand(1, [H|_], H).
+ambilDariHand(0, [H|_], H).
 ambilDariHand(NoKartu, [_|T], Temp) :-
-    NoKartu > 1,
+    NoKartu > 0,
     N1 is NoKartu - 1,
     ambilDariHand(N1, T, Temp).
 
@@ -39,25 +39,34 @@ jadiTop(NewTop) :-
     NewList = [NewTop|OldList],
     assertz(discardPile(NewList)).
 
-buangDariHand(Deleted) :-
+delete_element([_|Tail], 0, Tail).
+delete_element([Head|Tail], Index, [Head|NewTail]) :-
+    Index > 0,
+    NewIndex is Index - 1,
+    delete_element(Tail, NewIndex, NewTail).
+
+buangDariHand(Index) :-
     currentPlayer(Player),
     cards(Player, Hand),
-    delete(Hand, Deleted, NewHand),
+    delete_element(Hand, Index, NewHand),
     retract(cards(Player, Hand)),
     assertz(cards(Player, NewHand)).
 
 mainkanKartu(NoKartu):-
+    NoKartuRill is NoKartu - 1;
     currentPlayer(Player),
     cards(Player, Hand),
-    ambilDariHand(NoKartu, Hand, kartu(Warna, Jenis)),
+    ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
     (bisaDimainkan(Player, kartu(Warna, Jenis))->
     write(Player), write('memainkan kartu: '), write(Warna), write('-'), write(Jenis), nl,
     efekJenis(Jenis),
     jadiTop(kartu(Warna, Jenis)),
-    buangDariHand(kartu(Warna, Jenis)),
+    buangDariHand(NoKartuRill),
     passTurn,
     currentPlayer(NextPlayer),
     write('Giliran '), write(NextPlayer), nl
     ;
-    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl). 
+    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl, 
+    !,
+    fail). 
 
