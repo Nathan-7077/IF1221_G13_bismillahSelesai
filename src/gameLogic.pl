@@ -44,6 +44,93 @@ helperAmbil(N, [H|T], [H|Sisa]):-
         N1 is N-1,
         helperAmbil(N1, T, Sisa).
 
+/* Tantang */
+cekdiLoop(_, []).
+cekdiLoop(Player, [Head|Tail]) :-
+	\+ bisaDimainkan(Player, Head),
+	cekdiLoop(Player, Tail).
+
+cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
+	cards(Player, Hand),
+	getLength(Hand, Length),
+	( 
+		cekdiLoop(Player, Hand)
+			-> Hasil = 1
+			; Hasil = 0
+	).
+
+tantang:-
+	write('Tantangan dilakukan!'),
+	nl,
+	write('Memeriksa kartu '),
+	currentPlayer(Player),
+	write(Player),
+	write('...'),
+	nl,
+	cekGaAdaKartuYangBisaDimainin(Player, Hasil),
+	(
+		Hasil = 1
+		->
+		write('Tantangan gagal. '),
+		nl,
+		passTurn,
+		currentPlayer(NextPlayer),
+		ambilKartuUmum(NextPlayer, 6, _),
+		write(NextPlayer),
+		write(' mendapatkan 6 kartu secara acak'),
+		nl
+		;
+		write('Tantangan berhasil. '),
+		nl,
+		ambilKartuUmum(Player, 4, _),
+		write(Player),
+		write(' mendapatkan 4 kartu secara acak'),
+		passTurn,
+		currentPlayer(NextPlayer),
+		nl
+	).
+
+/* Tangkap */
+cekKartuTinggalSatu(Player):-
+	currentPlayer(Player),
+	cards(Player, Hand),
+	getLength(Hand, Length),
+	Length is 1.
+
+cekPlayerNggaUni(Nama, Hasil):-
+	(
+		playerBilangUni(Nama)
+		->
+		Hasil = 0
+		;
+		Hasil = 1
+	).
+
+tangkapPlayer(PlayerTuduh):-
+	(
+		cekKartuTinggalSatu(PlayerTuduh), cekPlayerNggaUni(PlayerTuduh, Hasil), Hasil == 1
+		->
+		ambilKartuUmum(PlayerTuduh, 1, _),
+		write(PlayerTuduh),
+		write(' ditangkap!, kartu '),
+		write(PlayerTuduh),
+		write(' bertambah satu')
+		;
+		write('Tidak bisa menangkap '),
+		write(PlayerTuduh),
+		nl,
+		currentPlayer(CurrPlayer),
+		write(CurrPlayer),
+		write(' mendapat 1 kartu penalti'),
+		nl,
+		ambilKartuUmum(CurrPlayer, 1, _),
+		passTurn,
+		currentPlayer(NextPlayer),
+    		write('Giliran '), 
+		write(NextPlayer), 
+		nl
+	).
+
 /*Handle Effect*/
 /* balik(List, Hasil) :- 
     balik(List, [], Hasil).
