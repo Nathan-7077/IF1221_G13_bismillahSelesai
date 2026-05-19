@@ -21,7 +21,7 @@ tangkapPlayer(Player):-
 		write(Nama),
 		write(' ditangkap!, kartu '),
 		write(Nama),
-		write(' bertambah satu').
+		write(' bertambah satu')
 		;
 		write('Tidak bisa menangkap '),
 		write(Nama),
