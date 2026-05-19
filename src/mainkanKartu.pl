@@ -68,7 +68,7 @@ buangDariHand(Index) :-
     assertz(cards(Player, NewHand)).
 
 mainkanKartu(NoKartu):-
-    NoKartuRill is NoKartu - 1;
+    NoKartuRill is NoKartu - 1,
     currentPlayer(Player),
     cards(Player, Hand),
     ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
