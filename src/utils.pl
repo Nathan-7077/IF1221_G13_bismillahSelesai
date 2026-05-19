@@ -27,7 +27,7 @@ shuffle([],[]).
 shuffle(List,[Elem|Shuffled]):-
     getLength(List,Len),
     random(0,Len,Indeks),
-    hapusElemen(Indeks,List,Elem,Sisa),
+    deleteElement(Indeks,List,Elem,Sisa),
     shuffle(Sisa,Shuffled).
 
 %yang dari Handbook
