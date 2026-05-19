@@ -23,7 +23,7 @@ ambilHasil(List):-
 
 ambilHasilHelper(Acc,List):-
     retract(tempFind(X)), !,
-    append(Acc,[X],NewAcc),
+    appendElement(Acc,[X],NewAcc),
     ambilHasilHelper(NewAcc,List).
 ambilHasilHelper(List,List).
 
@@ -137,7 +137,7 @@ assignPlayerOrder([P|Ps],I):-
 shuffle([],[]).
 
 shuffle(List,[Elem|Shuffled]):-
-    length(List,Len),
+    getLength(List,Len),
     random(0,Len,Indeks),
     hapusElemen(Indeks,List,Elem,Sisa),
     shuffle(Sisa,Shuffled).
@@ -173,15 +173,13 @@ distribusiPlayer(I,_):-
 
 distribusiPlayer(I,Deck):-
     playerOrder(I,P),
-    length(Hand,7),
+    getLength(Hand,7),
     append(Hand,Sisa,Deck),
     retract(cards(P,_)),
     assertz(cards(P,Hand)),
 
     I2 is I+1,
     distribusiPlayer(I2,Sisa).
-
-
 
 /* Discard pile */
 inisialisasiDiscardPile :-
@@ -191,7 +189,7 @@ inisialisasiDiscardPile :-
         Deck
     ),
     Deck \=[],
-    length(Deck,Len),
+    getLength(Deck,Len),
     random(0,Len,Indeks),
     hapusElemen(Indeks,Deck,K,_),
     retractall(discardPile(_)),

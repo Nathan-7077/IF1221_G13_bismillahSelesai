@@ -1,4 +1,4 @@
-:- include('card.pl').
+:- include('utils.pl').
 :- include('player.pl').
 :- include('gameLogic.pl').
 :- include('startGame.pl').
