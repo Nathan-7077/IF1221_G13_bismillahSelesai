@@ -1,4 +1,4 @@
-:- include('card.pl').
+:- include('utils.pl').
 :- include('player.pl').
 
 :- dynamic(discardPile/1).
@@ -139,15 +139,8 @@ shuffle([],[]).
 shuffle(List,[Elem|Shuffled]):-
     getLength(List,Len),
     random(0,Len,Indeks),
-    hapusElemen(Indeks,List,Elem,Sisa),
+    deleteElement(Indeks,List,Elem,Sisa),
     shuffle(Sisa,Shuffled).
-
-hapusElemen(0,[H|T],H,T):- !.
-
-hapusElemen(N,[H|T],Elem,[H|Sisa]):-
-    N>0,
-    N1 is N-1,
-    hapusElemen(N1,T,Elem,Sisa).
 
 writeList([]):-!.
 writeList([H]):-write(H),!.
@@ -191,7 +184,7 @@ inisialisasiDiscardPile :-
     Deck \=[],
     getLength(Deck,Len),
     random(0,Len,Indeks),
-    hapusElemen(Indeks,Deck,K,_),
+    deleteElement(Indeks,Deck,K,_),
     retractall(discardPile(_)),
     assertz(discardPile([K])),
     K=kartu(Warna,Jenis),

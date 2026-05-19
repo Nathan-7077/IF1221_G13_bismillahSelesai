@@ -85,16 +85,17 @@ efekDrawTwo :-
     currentPlayer(Current),
     getNextPlayer(Current, NextPlayer),
     ambilKartuUmum(NextPlayer, 2, _),
-    passTurn.
+    efekSkip.
 
 efekWild :- 
     write('Pilih warna kartu yang diinginkan: '), 
     read(WarnaNew), 
-    jadiTop(kartu(WarnaNew, _)),
+    discardPile([kartu(_, Jenis)|_]),
+    jadiTop(kartu(WarnaNew, Jenis)),
     write('Kartu paling atas sekarang berwarna '), write(WarnaNew).
 
 efekDrawFour :-
     currentPlayer(Current),
     getNextPlayer(Current, NextPlayer),
     ambilKartuUmum(NextPlayer, 4, _),
-    passTurn.
+    efekSkip.
