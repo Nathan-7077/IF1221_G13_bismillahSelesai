@@ -87,3 +87,45 @@ tampilKartu([kartu(W,J)|T]) :-
     write(J),
     write(' + '),
     tampilKartu(T).
+
+% tampilkan ranking
+tampilRanking :-
+    nl,
+    write('Urutan pemenang:'),
+    nl,
+
+    urutanPlayer(1).
+
+urutanPlayer(I) :-
+    numPlayers(N),
+    I>N,
+    !.
+
+urutanPlayer(I) :-
+    cariPeringkat(I,Pemain),
+    finalScore(Pemain,Skor),
+    write(I),
+    write('. '),
+    write(Pemain),
+    write(' ('),
+    write(Skor),
+    write(' poin)'),
+    nl,
+
+    I2 is I+1,
+    urutanPlayer(I2).
+
+% cari peringkat pemain
+cariPeringkat(N,Pemain) :-
+    findall(
+        (Skor,Player),
+        finalScore(Player,Skor),
+        List
+    ),
+    sort(List,Sorted),
+    ambilPeringkat(N,Sorted,Pemain).
+
+ambilPeringkat(1,[(_,P)|_],P).
+ambilPeringkat(N,[_|T],P) :-
+    N1 is N-1,
+    ambilPeringkat(N1,T,P).
