@@ -18,8 +18,24 @@ balikUrutan(Index1, Max) :-
     NextIndex is Index1 + 1,
     balikUrutan(NextIndex, Max).
 
-efekTerakhir([kartu(|Tail], Efek) :-
-    ()
+efekTerakhir([], Hasil) :- Hasil = 0.
+efekTerakhir([kartu(_, Jenis)|Tail], Hasil) :-
+    (Jenis == reverse ->
+    efekReverse, !, 
+    Hasil = 1,
+    fail
+    ;
+    Jenis == skip ->
+    efekJenis, !, 
+    Hasil = 1,
+    fail
+    ;
+    Jenis == draw_two ->
+    efekDrawTwo, !, 
+    Hasil = 1,
+    fail
+    ;
+    efekTerakhir(Tail)).
 
 efekReverse :- 
     numPlayers(Max),
@@ -31,10 +47,10 @@ efekSkip :-
     write('Pemain berikutnya kehilangan giliran'), nl.
 
 efekDrawTwo :-
-currentPlayer(Player),
-    ambilKartuUmum(Player, 2, _),
-    write('Pemain berikutnya mengambil dua kartu'), nl,
-    passTurn.
+    passTurn,
+    currentPlayer(NextPlayer),
+    ambilKartuUmum(NextPlayer, 2, _),
+    write('Pemain  '), write(NextPlayer), write(' mengambil dua kartu'), nl.
 
 efekWild :- 
     write('Pilih warna kartu yang diinginkan (hijau/kuning/biru/merah): '), 
@@ -55,6 +71,8 @@ efekDrawFour :-
     ambilKartuUmum(NextPlayer, 4, _)).
 
 efekMimic :-
-
-
-
+    discardPile(Discard),
+    efekTerakhir(Discard, Hasil), 
+    (Hasil == 1 ->
+    write('Efek mimic aktif'), nl).
+    
