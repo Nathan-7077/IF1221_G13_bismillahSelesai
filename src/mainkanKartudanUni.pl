@@ -22,11 +22,11 @@ cekKartuTinggalDua(Player):-
 				write(' menyerukan UNI!'),
 				assertz(PlayerBilangUni(Nama)),
 				passTurn,
-				currentPlayer(NextPlayer),
+				currentPlayer(NextPlayer)
 				;
 				write('Kartu tidak bisa dimainkan, mainkan kartu lain atau ambil kartu.')
 				nl
-			).
+		).
 		;
 		write('Kartu masih lebih dari 2, '),
 		write(Player),
