@@ -66,7 +66,7 @@ cekInfo:-
     listHand(ListPemain, ListHand),
     infoPemain(ListPemain, ListHand, 1),!.
 
-/*Ambil Kartu (Buat ambil kartu biasa)*/
+/*Ambil Kartu (Khusus buat ambil kartu biasa, jangan dipakai di tempat lain, kalau mau pakai pakai yg di gameLogic)*/
 ambilKartu:-
     currentPlayer(Player),
     ambilKartuUmum(Player, 1, KartuNew),
