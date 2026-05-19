@@ -69,3 +69,8 @@ reverseList(List, Reversed):-
 reverseHelper([], Accumulator, Accumulator).
 reverseHelper([Head|Tail], Accumulator, Reversed):-
     reverseHelper(Tail, [Head|Accumulator], Reversed).
+
+cekKartuTinggalDua(Player):-
+	cards(Player, Hand),
+	getLength(Hand, Length),
+	Length is 2.
