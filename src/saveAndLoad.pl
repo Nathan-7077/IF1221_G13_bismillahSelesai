@@ -3,7 +3,7 @@ saveGame:-
     nl,
     
     write('Masukkan nama file penyimpanan: '),
-    read(FileName),
+    read(FileName).
 
 saveGame:-
     nl,
