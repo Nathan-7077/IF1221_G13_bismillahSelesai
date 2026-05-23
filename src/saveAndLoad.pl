@@ -11,7 +11,7 @@ saveGame:-
     write('Belum ada permainan yang berjalan.'),
     nl.
 
-  loadGame:-
+loadGame:-
     nl,
     
     write('Masukkan nama file yang akan dimuat: '),
