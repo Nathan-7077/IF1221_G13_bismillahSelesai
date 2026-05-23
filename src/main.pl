@@ -4,6 +4,7 @@
 :- include('startGame.pl').
 :- include('turn.pl').
 :- include('endGame.pl').
+:- include('saveAndLoad.pl').
 
 main :-
     nl,
