@@ -2,7 +2,7 @@ saveGame:-
     gameStarted,
     nl,
 
-    write('Masukkan nama file penyimpanan: '),
+    write('Masukkan nama file penyimpanan (gunakan petik dan akhiri dengan .pl, contoh: ''permainan1.pl''): '),
     read(FileName),
 
     tell(FileName),
@@ -15,24 +15,24 @@ saveGame:-
     listing(discardPile),
     listing(gameStarted),
     told,
+
     nl,
-    
     write('Status permainan berhasil disimpan ke '),
     write(FileName),
     write('.'),
     nl,
-    
     !.
 
 saveGame:-
     nl,
-    
     write('Belum ada permainan yang berjalan.'),
     nl.
 
+
 loadGame:-
+
     nl,
-    write('Masukkan nama file yang akan dimuat: '),
+    write('Masukkan nama file yang akan dimuat (gunakan petik dan akhiri dengan .pl, contoh: ''permainan1.pl''): '),
     read(FileName),
 
     retractall(player(_)),
@@ -44,15 +44,17 @@ loadGame:-
     retractall(discardPile(_)),
     retractall(gameStarted),
     retractall(finalScore(_,_)),
+
     consult(FileName),
+
     nl,
-    
     write('Status permainan berhasil dimuat dari '),
     write(FileName),
     write('.'),
     nl,
 
     currentPlayer(Player),
+
     write('Melanjutkan giliran '),
     write(Player),
     write('.'),
