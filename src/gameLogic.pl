@@ -36,100 +36,99 @@ tambahKartu(Hand, [Head|Tail], Hasil):-
 
 printAmbilKartu([]).
 printAmbilKartu([kartu(Warna, Jenis)|Sisa]):-
-    write('- '), write(Warna), write('-'), write(Jenis), nl,
-    printAmbilKartu(Sisa).
+    write('-> '), write(Warna), write('-'), write(Jenis), nl,
+    printAmbilKartu(Sisa). 
+
 helperAmbil(0, _, []):-!.
 helperAmbil(N, [H|T], [H|Sisa]):-
         N>0,
         N1 is N-1,
         helperAmbil(N1, T, Sisa).
 
-/* Tantang */
-cekdiLoop(_, []).
-cekdiLoop(Player, [Head|Tail]) :-
-	\+ bisaDimainkan(Player, Head),
-	cekdiLoop(Player, Tail).
+balikUrutan(Max, Max) :-
+    playerOrder(Max, Current),
+    !,
+    retract(playerOrder(Max, Current)),
+    assertz(playerOrder(1, Current)).
 
-cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
-	cards(Player, Hand),
-	getLength(Hand, Length),
-	( 
-		cekdiLoop(Player, Hand)
-			-> Hasil = 1
-			; Hasil = 0
-	).
+balikUrutan(Index1, Max) :- 
+    Index1 < Max, 
+    N is Max - Index1 + 1,
+    playerOrder(Index1, Current),
+    !,
+    retract(playerOrder(Index1, Current)),
+    assertz(playerOrder(N, Current)),
+    NextIndex is Index1 + 1,
+    balikUrutan(NextIndex, Max).
 
-tantang:-
-	write('Tantangan dilakukan!'),
-	nl,
-	write('Memeriksa kartu '),
-	currentPlayer(Player),
-	write(Player),
-	write('...'),
-	nl,
-	cekGaAdaKartuYangBisaDimainin(Player, Hasil),
-	(
-		Hasil = 1
-		->
-		write('Tantangan gagal. '),
-		nl,
-		passTurn,
-		currentPlayer(NextPlayer),
-		ambilKartuUmum(NextPlayer, 6, _),
-		write(NextPlayer),
-		write(' mendapatkan 6 kartu secara acak'),
-		nl
-		;
-		write('Tantangan berhasil. '),
-		nl,
-		ambilKartuUmum(Player, 4, _),
-		write(Player),
-		write(' mendapatkan 4 kartu secara acak'),
-		passTurn,
-		currentPlayer(NextPlayer),
-		nl
-	).
+efekTerakhir([], Hasil) :- Hasil = 0.
+efekTerakhir([kartu(_, Jenis)|Tail], Hasil) :-
+    (Jenis == reverse ->
+    efekReverse, !, 
+    Hasil = 1,
+    fail
+    ;
+    Jenis == skip ->
+    efekJenis, !, 
+    Hasil = 1,
+    fail
+    ;
+    Jenis == draw_two ->
+    efekDrawTwo, !, 
+    Hasil = 1,
+    fail
+    ;
+    efekTerakhir(Tail)).
 
-/* Tangkap */
-cekKartuTinggalSatu(Player):-
-	currentPlayer(Player),
-	cards(Player, Hand),
-	getLength(Hand, Length),
-	Length is 1.
+efekReverse :- 
+    numPlayers(Max),
+    balikUrutan(1, Max),
+    write('Urutan pemain dibalik!'), nl.
 
-cekPlayerNggaUni(Nama, Hasil):-
-	(
-		playerBilangUni(Nama)
-		->
-		Hasil = 0
-		;
-		Hasil = 1
-	).
+efekSkip :- 
+    passTurn,
+    write('Pemain berikutnya kehilangan giliran'), nl.
 
-tangkapPlayer(PlayerTuduh):-
-	(
-		cekKartuTinggalSatu(PlayerTuduh), cekPlayerNggaUni(PlayerTuduh, Hasil), Hasil == 1
-		->
-		ambilKartuUmum(PlayerTuduh, 1, _),
-		write(PlayerTuduh),
-		write(' ditangkap!, kartu '),
-		write(PlayerTuduh),
-		write(' bertambah satu')
-		;
-		write('Tidak bisa menangkap '),
-		write(PlayerTuduh),
-		nl,
-		currentPlayer(CurrPlayer),
-		write(CurrPlayer),
-		write(' mendapat 1 kartu penalti'),
-		nl,
-		ambilKartuUmum(CurrPlayer, 1, _),
-		passTurn,
-		currentPlayer(NextPlayer),
-    		write('Giliran '), 
-		write(NextPlayer), 
-		nl
-	).
+efekDrawTwo :-
+    passTurn,
+    currentPlayer(NextPlayer),
+    ambilKartuUmum(NextPlayer, 2, _),
+    write('Pemain  '), write(NextPlayer), write(' mengambil dua kartu'), nl.
+
+efekWild :- 
+    write('Pilih warna kartu yang diinginkan (hijau/kuning/biru/merah): '), 
+    read(WarnaNew), 
+    jadiTop(kartu(WarnaNew, _)),
+    write('Kartu paling atas sekarang berwarna '), write(WarnaNew), nl.
+
+efekDrawFour :-  
+    currentPlayer(Player),
+    passTurn,
+    currentPlayer(NextPlayer),
+    nl, write('Giliran '),
+    write(NextPlayer), nl,
+    write('Tantang '), write(Player), write(' (ya/yidak)? '),
+    read(Konfirmasi),
+    (
+        Konfirmasi == ya
+        ->
+        tantang
+        ;
+        Konfirmasi == tidak
+        ->
+        ambilKartuUmum(NextPlayer, 4, KartuNew),
+        write(NextPlayer),
+        write(' mendapatkan 4 kartu.'), nl,
+        write('Kartu yang didapat:'), nl,
+        printAmbilKartu(KartuNew), nl
+    ).
+    
+
+efekMimic :-
+    discardPile(Discard),
+    efekTerakhir(Discard, Hasil), 
+    (Hasil == 1 ->
+    write('Efek mimic aktif'), nl).
 
 /*Handle Effect*/
 /* balik(List, Hasil) :- 
@@ -139,7 +138,7 @@ balik([], B, B).
 balik([H|T], B, Hasil) :- 
     balik(T, [H|B], Hasil). */
 
-balikUrutan(Max, Max) :-
+/* balikUrutan(Max, Max) :-
     playerOrder(Max, Current),
     !,
     retract(playerOrder(Max, Current)),
@@ -182,4 +181,4 @@ efekDrawFour :-
     currentPlayer(Current),
     getNextPlayer(Current, NextPlayer),
     ambilKartuUmum(NextPlayer, 4, _),
-    efekSkip.
+    efekSkip. */

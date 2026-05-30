@@ -77,7 +77,7 @@ ambilKartu:-
     printAmbilKartu(KartuNew), nl,
     passTurn,
     currentPlayer(NextPlayer),
-    write('Giliran '), write(NextPlayer), write('.'), nl.
+    write('Giliran '), write(NextPlayer), write('.'), nl, !.
 
 /*Mainkan Kartu*/
 ambilDariHand(0, [H|_], H).
@@ -163,77 +163,82 @@ mainkanKartu(NoKartu):-
     !,
     fail).
 
-mainkanKartudanUni(NoKartu):-
-	currentPlayer(Player),
-	(
-		cekKartuTinggalDua(Player)
-		->
-		NoKartuRill is NoKartu - 1,
-		cards(Player, Hand),
-		ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
-		(
-			bisaDimainkan(Player, kartu(Warna, Jenis))
-			->
-			write(Player),
-			write(' memainkan kartu: '),
-			write(Warna),
-			write('-'),
-			write(Jenis),
-			nl,
-			jadiTop(kartu(Warna, Jenis)),
-			buangDariHand(NoKartuRill),
-			cards(Player, NewHand),
-			(
-				NewHand = []
-				->
-				write(Player),
-				write(' memenangkan permainan!'),
-				nl,
-				endGame
-				;
-				efekJenis(Jenis),
-				write(Player),
-				write(' menyerukan UNI!'),
-				nl,
-				assertz(playerBilangUni(Player)),
-				passTurn,
-				currentPlayer(NextPlayer),
-				write('Giliran '),
-				write(NextPlayer),
-				write('.'),
-				nl,nl
-			),
-			!
-			;
-			write('Kartu tidak bisa dimainkan, mainkan kartu lain atau ambil kartu.'),
-			nl,
-			!,
-			fail
-		)
-		;
-		write('Kartu masih lebih dari 2, '),
-		write(Player),
-		write(' mendapat 1 kartu'),
-		nl,
-		ambilKartuUmum(Player, 1, _),
-		passTurn,
-		currentPlayer(NextPlayer),
-		write('Giliran '),
-		write(NextPlayer),
-		write('.'),
-		nl
-	).
+/* Mainkan kartu dan uni */
+uni(NoKartu):-
+    currentPlayer(Player),
+    (
+        NoKartuRill is NoKartu - 1,
+        cards(Player, Hand),
+        ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
+        (
+            bisaDimainkan(Player, kartu(Warna, Jenis))
+            ->
+            (
+                cekKartuTinggalDua(Player)
+                ->
+                write(Player),
+                write(' memainkan kartu: '),
+                write(Warna),
+                write('-'),
+                write(Jenis),
+                nl, nl,
+                jadiTop(kartu(Warna, Jenis)),
+                buangDariHand(NoKartuRill),
+                write(Player),
+                write(' menyerukan UNI!'),
+                nl,
+                assertz(playerBilangUni(Player)),
+                efekJenis(Jenis),
+                passTurn,
+                currentPlayer(NextPlayer),
+                write('Giliran '),
+                write(NextPlayer),
+                write('.'),
+                nl, nl,
+                lihatKartuTop
+                ;
+                write(Player),
+                write(' memainkan kartu: '),
+                write(Warna),
+                write('-'),
+                write(Jenis),
+                nl, nl,
+                jadiTop(kartu(Warna, Jenis)),
+                buangDariHand(NoKartuRill),
+                write(Player),
+                write(' masih memiliki kartu lebih dari 2!'),
+                nl,
+                write(Player),
+                write(' mendapatkan 1 kartu penalti.'),
+                nl, nl,
+                ambilKartuUmum(Player, 1, KartuNew),
+                write(Player), 
+                write(' mendapatkan:'), nl,
+                printAmbilKartu(KartuNew), nl,
+                efekJenis(Jenis),
+                passTurn,
+                currentPlayer(NextPlayer),
+                write('Giliran '),
+                write(NextPlayer),
+                write('.'),
+                nl, nl,
+                lihatKartuTop,
+                !
+            )
+            ;
+            write('Kartu tidak bisa dimainkan, mainkan kartu lain atau ambil kartu'),
+            nl, nl,
+            lihatKartuTop,
+            nl,
+            !
+        )
+    ).
 
 /*tantang*/
 cekdiLoop(_, []).
 cekdiLoop(Player, [Head|Tail]) :-
 	\+ bisaDimainkan(Player, Head),
 	cekdiLoop(Player, Tail).
-
-getLength([], 0).
-getLength([_|Tail], Length) :-
-	getLength(Tail, TailLength),
-	Length is TailLength + 1.
 
 cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	cards(Player, Hand),
@@ -245,34 +250,69 @@ cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	).
 
 tantang:-
-	write('Tantangan dilakukan!'),
-	nl,
-	write('Memeriksa kartu '),
-	currentPlayer(Player),
-	write(Player),
-	write('...'),
-	nl,
+    write('Tantangan dilakukan!'), nl,
+    write('Memeriksa kartu '),
+    getBeforePlayer(BeforePlayer),
+    write(BeforePlayer),
+    write('...'), nl,
+    currentPlayer(Player),
+    cekGaAdaKartuYangBisaDimainin(Player, Hasil),
+    (
+        Hasil == 1
+        ->
+        write('Tantangan gagal.'), nl,
+        ambilKartuUmum(Player, 6, KartuNew),
+        write(Player),
+        write(' mendapatkan 6 kartu penalti.'), nl,
+        write('Kartu yang didapat:'),
+        printAmbilKartu(KartuNew), nl
+        ;
+        write('Tantangan berhasil.'), nl,
+        ambilKartuUmum(BeforePlayer, 4, KartuNew),
+        write(BeforePlayer),
+        write(' mendapatkan 4 kartu penalti.'), nl, nl,
+        write('Kartu yang didapat:'), nl,
+        printAmbilKartu(KartuNew), nl, !
+    ).
 
-	cekGaAdaKartuYangBisaDimainin(Player, Hasil),
+/* Tangkap */
+cekKartuTinggalSatu(Player):-
+	cards(Player, Hand),
+	getLength(Hand, Length),
+	Length is 1.
 
+cekPlayerNggaUni(Nama, Hasil):-
 	(
-		Hasil = 1
+		playerBilangUni(Nama)
 		->
-		write('Tantangan gagal. '),
-		nl,
-		passTurn,
-		currentPlayer(NextPlayer),
-		ambilKartuUmum(NextPlayer, 6, _),
-		write(NextPlayer),
-		write(' mendapatkan 6 kartu secara acak'),
-		nl
+		Hasil is 0
 		;
-		write('Tantangan berhasil. '),
-		nl,
-		ambilKartuUmum(Player, 4, _),
-		write(Player),
-		write(' mendapatkan 4 kartu secara acak'),
-		passTurn,
-		currentPlayer(NextPlayer),
-		nl
+		Hasil is 1
+	).
+
+tangkap(PlayerTuduh):-
+    cekPlayerNggaUni(PlayerTuduh, Hasil),
+	(
+		cekKartuTinggalSatu(PlayerTuduh), Hasil =:= 1
+        ->
+        ambilKartuUmum(PlayerTuduh, 1, _),
+        write(PlayerTuduh),
+        write(' ditangkap!, kartu '),
+        write(PlayerTuduh),
+        write(' bertambah satu'),
+        !
+        ;
+        write('Tidak bisa menangkap '),
+        write(PlayerTuduh),
+        nl,
+        currentPlayer(CurrPlayer),
+        write(CurrPlayer),
+        write(' mendapat 1 kartu penalti'),
+        nl,
+        ambilKartuUmum(CurrPlayer, 1, _),
+        passTurn,
+        currentPlayer(NextPlayer),
+        write('Giliran '), 
+        write(NextPlayer), 
+        nl, !
 	).

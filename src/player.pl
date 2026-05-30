@@ -18,6 +18,23 @@ getNextPlayer(Current,Next) :-
     NextIndex is (Index mod Max)+1,
     playerOrder(NextIndex,Next).
 
+% get player sebelumnya
+getBeforePlayer(Before):-
+    currentPlayer(Current),
+    playerOrder(Index, Current),
+    IndexBefore is Index - 1,
+    (
+        IndexBefore > 0
+        ->
+        playerOrder(IndexBefore, Before),
+        !
+        ;
+        numPlayers(Num),
+        playerOrder(Num, Before),
+        !
+    ).
+    
+
 % ganti giliran
 passTurn :-
     currentPlayer(Current),

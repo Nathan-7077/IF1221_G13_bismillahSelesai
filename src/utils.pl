@@ -21,6 +21,15 @@ ambilHasilHelper(Acc,List):-
     ambilHasilHelper(NewAcc,List).
 ambilHasilHelper(List,List).
 
+/* Lihat kartu top */
+lihatKartuTop:-
+    discardPile([K|_]),
+    K=kartu(Warna, Jenis), 
+    write('Kartu top : '),
+    write(Warna),
+    write('-'),
+    write(Jenis).
+
 /* Shuffle */
 shuffle([],[]).
 
