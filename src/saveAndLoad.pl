@@ -14,6 +14,7 @@ saveGame:-
     listing(numPlayers),
     listing(discardPile),
     listing(gameStarted),
+    listing(kartuHidden),
     told,
 
     nl,
@@ -44,6 +45,7 @@ loadGame:-
     retractall(discardPile(_)),
     retractall(gameStarted),
     retractall(finalScore(_,_)),
+    retractall(kartuHidden(_,_)),
 
     consult(FileName),
 
