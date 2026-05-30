@@ -195,7 +195,7 @@ uni(NoKartu):-
                 write(NextPlayer),
                 write('.'),
                 nl, nl,
-                lihatKartuTop
+                lihatKartuTop, !
                 ;
                 write(Player),
                 write(' memainkan kartu: '),
