@@ -353,20 +353,21 @@ sembunyikanKartu(NomorUrut):-
     write('Giliran '), write(NextPlayer), write('.'), nl,!.
 sembunyikanKartu(_):-
     write('Gagal menyembunyikan kartu'),nl.
+	
 /*tampilkanKartu*/
 tampilkanKartu:-
     currentPlayer(Player),
     (kartuHidden(Player, Kartu)->true;
-write('Tidak ada kartu yang sedang disembunyikan'),nl,fail),
-cards(Player, Hand),
-getLength(Hand, Len),
-(Len=:=1->write('Gagal menampilkan kartu'),nl,fail;true),
-retract(kartuHidden(Player, Kartu)),
-append(Hand, [Kartu], HandBaru),
-retract(cards(Player, Hand)),
-assertz(cards(Player, HandBaru)),
-Kartu=kartu(Warna, Jenis),
-write('Kartu tersembunyi '), write(Warna), write('-'), write(Jenis),
-write('dikembalikan ke tangan '), write(Player), write('.'), nl,!.
+	write('Tidak ada kartu yang sedang disembunyikan'),nl,fail),
+	cards(Player, Hand),
+	getLength(Hand, Len),
+	(Len=:=1->write('Gagal menampilkan kartu'),nl,fail;true),
+	retract(kartuHidden(Player, Kartu)),
+	append(Hand, [Kartu], HandBaru),
+	retract(cards(Player, Hand)),
+	assertz(cards(Player, HandBaru)),
+	Kartu=kartu(Warna, Jenis),
+	write('Kartu tersembunyi '), write(Warna), write('-'), write(Jenis),
+	write('dikembalikan ke tangan '), write(Player), write('.'), nl,!.
 tampilkanKartu:-
     write('Gagal menampilkan kartu tersembunyi.'),nl.
