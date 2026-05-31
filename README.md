@@ -13,8 +13,8 @@ Program berupa implementasi game bernama “UNI” dengan menggunakan GNU Prolog
 
 ## Cara Menjalankan Program
 ### Prasyarat:  
-   - Install [GNU Prolog](http://www.gprolog.org/#download).
-   - 
+   - Telah menginstall [GNU Prolog](http://www.gprolog.org/#download).
+     
 ### Menjalankan Program:
 **Windows (Command Prompt / PowerShell):**
 ```bash
