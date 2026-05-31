@@ -24,6 +24,10 @@ lihatKartu:-
     currentPlayer(Player),!,
     cards(Player, Hand),
     helperLihat(Hand, 1).
+	(kartuHidden(Player, Kartu(W,J))->
+	getLength(Hand, Len),
+	Nomor is Len+1,
+	write(Nomor), write('. '), write(W), write('-'), write (J), write(' (Tersembunyi)'),nl;true).
 helperLihat([], _):- !.
 helperLihat([kartu(Warna, Jenis)| Sisa], Indeks):-
     write(Indeks), write('. '), write(Warna), write('-'), write(Jenis),nl,
