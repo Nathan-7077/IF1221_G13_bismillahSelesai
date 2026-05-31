@@ -1,16 +1,16 @@
 :-include('gameLogic.pl').
-:-include('player.pl').
-:-include('utils.pl').
-
 :- dynamic(playerBilangUni/1).
 
 /*Yang tentang info2 dalam game*/
 lihatCommand:-
     write('Aksi utama yang tersedia:'),nl,
-    write('1. mainkanKartu(NoKartu)'), nl,
-    write('2. ambilKartu'), nl,
-    write('3. uni(NoKartu)'), nl,
-    nl,
+    write('1. ambilKartu'), nl,
+    write('2. mainkanKartu'), nl,
+    write('3. tantang'), nl,
+    write('4. uni'), nl,
+    write('5. tangkap'), nl,
+	  write('6. sembunyikanKartu'), nl,
+  	write('7. tampilkanKartu'), nl,
     write('Aksi pendukung yang tersedia:'),nl,
     write('1. lihatCommand'),nl,
     write('2. lihatKartu'),nl,
@@ -21,7 +21,15 @@ lihatKartu:-
     write('Berikut kartu yang anda miliki'),nl,
     currentPlayer(Player),!,
     cards(Player, Hand),
-    helperLihat(Hand, 1).
+    helperLihat(Hand, 1),
+	tampilkanHidden(Player, Hand).
+tampilkanHidden(Player, Hand):-
+	kartuHidden(Player, Kartu),!,
+	Kartu= kartu(W,J),
+	getLength(Hand, Len),
+	Nomor is Len+1,
+	write(Nomor), write('. '), write(W), write('-'), write(J), write(' (Tersembunyi)'),nl.
+tampilkanHidden(_, _).
 helperLihat([], _):- !.
 helperLihat([kartu(Warna, Jenis)| Sisa], Indeks):-
     write(Indeks), write('. '), write(Warna), write('-'), write(Jenis),nl,
@@ -311,6 +319,16 @@ cekPlayerNggaUni(Nama, Hasil):-
 		;
 		Hasil is 1
 	).
+tangkap(PlayerTuduh):-
+        kartuHidden(PlayerTuduh, _),!,
+        write('Terdapat kartu yang disembunyikan oleh '), write(PlayerTuduh), nl,
+        write('Perintah tangkap tidak valid. '),
+        currentPlayer(CurrPlayer),
+        write(CurrPlayer), write(' mendapatkan 1 kartu penalti'), nl,
+        ambilKartuUmum(CurrPlayer, 1, _),
+        passTurn,
+        currentPlayer(NextPlayer),
+        write('Giliran '), write(NextPlayer), write('.'),nl.
 
 tangkap(PlayerTuduh):-
     cekPlayerNggaUni(PlayerTuduh, Hasil),
@@ -333,3 +351,44 @@ tangkap(PlayerTuduh):-
         nl,
         ambilKartuUmum(CurrPlayer, 1, _), !
 	).
+/*sembunyikanKartu*/
+sembunyikanKartu(NomorUrut):-
+    currentPlayer(Player),
+    (kartuHidden(Player,_)->
+    write('Anda telah menyembunyikan kartu'),nl,fail;true),
+    cards(Player, Hand),
+    getLength(Hand, Len),
+    (Len=<1->
+    write('Gagal menampilkan kartu'),nl,fail;true),
+    NoKartuRill is NomorUrut-1,
+    (ambilDariHand(NoKartuRill, Hand, Kartu)->true;
+    write('Nomor kartu tidak valid'),nl,fail),
+    delete_element(Hand, NoKartuRill, NewHand),
+    retract(cards(Player, Hand)),
+    assertz(cards(Player, NewHand)),
+    assertz(kartuHidden(Player, Kartu)),
+    Kartu=kartu(Warna, Jenis),
+    write('kartu '), write(Warna), write('-'), write(Jenis), write(' berhasil disembunyikan.'),nl,
+	passTurn,
+    currentPlayer(NextPlayer),
+    write('Giliran '), write(NextPlayer), write('.'), nl,!.
+sembunyikanKartu(_):-
+    write('Gagal menyembunyikan kartu'),nl.
+	
+/*tampilkanKartu*/
+tampilkanKartu:-
+    currentPlayer(Player),
+    (kartuHidden(Player, Kartu)->true;
+	write('Tidak ada kartu yang sedang disembunyikan'),nl,fail),
+	cards(Player, Hand),
+	getLength(Hand, Len),
+	(Len=:=1->write('Gagal menampilkan kartu'),nl,fail;true),
+	retract(kartuHidden(Player, Kartu)),
+	append(Hand, [Kartu], HandBaru),
+	retract(cards(Player, Hand)),
+	assertz(cards(Player, HandBaru)),
+	Kartu=kartu(Warna, Jenis),
+	write('Kartu tersembunyi '), write(Warna), write('-'), write(Jenis),
+	write(' dikembalikan ke tangan '), write(Player), write('.'), nl,!.
+tampilkanKartu:-
+    write('Gagal menampilkan kartu tersembunyi.'),nl.
