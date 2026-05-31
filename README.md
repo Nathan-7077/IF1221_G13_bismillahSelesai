@@ -1,6 +1,6 @@
 
 # IF1221 - Tugas Besar Logika Komputasional
----
+
 ## Daftar Isi
 - [Gambaran Singkat](#gambaran-singkat)
 - [Cara Menjalankan Program](#cara-menjalankan-program)
