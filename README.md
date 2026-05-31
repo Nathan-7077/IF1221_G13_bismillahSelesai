@@ -68,7 +68,13 @@ Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 ## Anggota dan Pembagian Tugas
 |Nama|NIM|Tugas|
 |---|---|---|
-|Faishal Ahmad Nurdin|13525027 |DDDDDDDDDDDDDD|
+|Faishal Ahmad Nurdin|13525027 |gameLogic.pl
+turn.pl
+mimic card
+card.pl
+Pengerjaan laporan bab 2
+
+|
 |Aditya Rasyid|13525039|DDDDDDDDD|
 |Nathaniel Marvelo|13525107 |DDDDDDDDD|
 |Abdur Rauuf Fawaaz|13525117|DDDDDDDDDD|
