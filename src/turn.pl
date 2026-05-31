@@ -1,4 +1,5 @@
 :-include('gameLogic.pl').
+:- include('endGame.pl').
 :- dynamic(playerBilangUni/1).
 
 /*Yang tentang info2 dalam game*/
@@ -99,7 +100,7 @@ jadiTop(NewTop) :-
     NewList = [NewTop|OldList],
     assertz(discardPile(NewList)).
 
-efekJenis(Y) :-
+efekJenis(X, Y) :-
     Y == reverse,
     numPlayers(Max), 
     (Max > 2 ->
@@ -108,33 +109,36 @@ efekJenis(Y) :-
     efekSkip),
     !.
 
-efekJenis(Y) :-
+efekJenis(X, Y) :-
     Y == skip, 
     efekSkip,
+    jadiTop(kartu(X, Y)),
     !.
 
-efekJenis(Y) :-
+efekJenis(X, Y) :-
     Y == draw_two, 
     efekDrawTwo,
     !.
 
-efekJenis(Y) :-
+efekJenis(X, Y) :-
     Y == wild, 
     efekWild, !.
 
-efekJenis(Y) :-
+efekJenis(X, Y) :-
     Y == wild_draw_four, 
     efekWild,
     efekDrawFour,
     !.
 
-efekJenis(Y) :-
+efekJenis(X, Y) :-
     Y == mimic,
     efekMimic,
     efekWild,
     !.
 
-efekJenis(_).
+efekJenis(X, Y) :-
+    jadiTop(kartu(X, Y)), 
+    !.
 
 delete_element([_|Tail], 0, Tail).
 delete_element([Head|Tail], Index, [Head|NewTail]) :-
@@ -160,10 +164,17 @@ mainkanKartu(NoKartu):-
     buangDariHand(NoKartuRill),
     retractall(kartuHidden(Player, kartu(Warna, Jenis))),
     jadiTop(kartu(Warna, Jenis)),
-    efekJenis(Jenis),
-    passTurn,
-    currentPlayer(NextPlayer),
-    write('Giliran '), write(NextPlayer), nl,
+
+    (
+        cards(Player,[])
+        ->
+        endGame
+        ;
+        efekJenis(Jenis),
+        passTurn,
+        currentPlayer(NextPlayer),
+        write('Giliran '), write(NextPlayer), nl
+    ),
     !
     ;
     nl, write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl, 
@@ -264,7 +275,7 @@ cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	).
 
 tantang:-
-    discardPile([_, K|_]),
+    discardPile([K|_]),
     K=kartu(Warna, Jenis),
     getBeforePlayer(BeforePlayer), 
     (
