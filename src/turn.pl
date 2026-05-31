@@ -21,7 +21,7 @@ lihatKartu:-
     write('Berikut kartu yang anda miliki'),nl,
     currentPlayer(Player),!,
     cards(Player, Hand),
-    helperLihat(Hand, 1).
+    helperLihat(Hand, 1),
 	(kartuHidden(Player, Kartu(W,J))->
 	getLength(Hand, Len),
 	Nomor is Len+1,
