@@ -39,15 +39,15 @@ Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 │   ├── Milestone2_G13.pdf  # Laporan Milestone 2
 │   └── Laporan             # Laporan Akhir
 ├── src/                     
-│   ├── card.pl             # 
-│   ├── endGame.pl          # 
-│   ├── gameLogic.pl        #
-│   ├── main.pl             #
-│   ├── player.pl           #
-│   ├── saveAndLoad.pl      #
-│   ├── startGame.pl        #
-│   ├── turn.pl             #
-│   └── utils.pl            #
+│   ├── card.pl             # Definisi kartu
+│   ├── endGame.pl          # Logika akhir permainan dan perhitungan skor
+│   ├── gameLogic.pl        # Logika utama permainan
+│   ├── main.pl             # Entry point program
+│   ├── player.pl           # Manajemen pemain
+│   ├── saveAndLoad.pl      # Simpan dan muat state permainan
+│   ├── startGame.pl        # Inisialisasi permainan
+│   ├── turn.pl             # Implememtasi aksi utama dan pendukung dalam turn
+│   └── utils.pl            # Utilitas umum
 │
 └── README.md               # Dokumentasi Projek
 ```
@@ -68,14 +68,9 @@ Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 ## Anggota dan Pembagian Tugas
 |Nama|NIM|Tugas|
 |---|---|---|
-|Faishal Ahmad Nurdin|13525027 |gameLogic.pl
-turn.pl
-mimic card
-card.pl
-Pengerjaan laporan bab 2
-
+|Faishal Ahmad Nurdin|13525027 |gameLogic.pl, turn.pl, mimic card, card.pl, pengerjaan laporan bab 2 |
+|Aditya Rasyid|13525039|startGame.pl, card.pl, player.pl, endGame.pl, saveAndLoad.pl, pengerjaan laporan bab 3
 |
-|Aditya Rasyid|13525039|DDDDDDDDD|
-|Nathaniel Marvelo|13525107 |DDDDDDDDD|
-|Abdur Rauuf Fawaaz|13525117|DDDDDDDDDD|
+|Nathaniel Marvelo|13525107 |startGame.pl, gameLogic.pl, turn.pl, sembunyikanKartu, README.md, pengerjaan laporan bab 1|
+|Abdur Rauuf Fawaaz|13525117|main.pl, turn.pl, gameLogic.pl, pengerjaan laporan bab 3|
 ---
