@@ -12,10 +12,10 @@
 Program berupa implementasi game bernama “UNI” dengan menggunakan GNU Prolog. Implementasi yang dibuat mengandung berbagai materi prolog yang telah diajarkan seperti deklarasi fakta dan rules, rekursi, list, file eksternal, penggunaan cut dan fail, dan materi-materi lain yang telah diajarkan di kelas Logika Komputasional IF1221.	
 
 ## Cara Menjalankan Program
-###**Prasyarat**:  
+###Prasyarat:  
    - Install [GNU Prolog](http://www.gprolog.org/#download).
    - 
-###**Menjalankan Program**
+###Menjalankan Program
 **Windows (Command Prompt / PowerShell):**
 ```bash
 gprolog --consult-file src/main.pl
