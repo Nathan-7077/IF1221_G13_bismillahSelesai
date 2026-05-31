@@ -28,7 +28,7 @@ tampilkanHidden(Player, Hand):-
 	Kartu= kartu(W,J),
 	getLength(Hand, Len),
 	Nomor is Len+1,
-	write(Nomor), write('. '), write(W), write('-'), write (J), write(' (Tersembunyi)'),nl.
+	write(Nomor), write('. '), write(W), write('-'), write(J), write(' (Tersembunyi)'),nl.
 tampilkanHidden(_, _).
 helperLihat([], _):- !.
 helperLihat([kartu(Warna, Jenis)| Sisa], Indeks):-
