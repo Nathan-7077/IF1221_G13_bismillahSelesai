@@ -1,5 +1,4 @@
 :-include('gameLogic.pl').
-:-include('player.pl').
 :-include('utils.pl').
 
 :- dynamic(playerBilangUni/1).
