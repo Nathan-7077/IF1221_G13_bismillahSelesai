@@ -134,7 +134,7 @@ efekJenis(Y) :-
     efekWild,
     !.
 
-efekJenis(Y).
+efekJenis(_).
 
 delete_element([_|Tail], 0, Tail).
 delete_element([Head|Tail], Index, [Head|NewTail]) :-
@@ -264,7 +264,7 @@ cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	).
 
 tantang:-
-    discardPile([K|_]),
+    discardPile([_, K|_]),
     K=kartu(Warna, Jenis),
     getBeforePlayer(BeforePlayer), 
     (
