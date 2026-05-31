@@ -3,18 +3,17 @@
 :- include('endGame.pl').
 :- include('saveAndLoad.pl').
 
+:- initialization(main).
+
 main :-
-    nl,
-    write('Ketik "mulaiUNI." untuk memulai permainan UNI.'),
-    nl,
+    write('\n Ketik "mulaiUNI." untuk memulai permainan UNI. \n'),
     write('>> '),
     read(Command),
     (
         Command = mulaiUNI
         ->
         (
-            startGame,
-            inputCommand
+            startGame
         )
         ;
         Command = exit
