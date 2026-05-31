@@ -1,6 +1,8 @@
 :- include('player.pl').
 :- include('utils.pl').
 
+:- dynamic(bisaDitantang/1).
+
 kartuValid(kartu(hitam, wild),_).
 kartuValid(kartu(hitam, wild_draw_four), _).
 %kartuValid(kartu(hitam, mimic), _). Nyiapin doang buat entar
@@ -98,11 +100,15 @@ efekDrawTwo :-
 efekWild :- 
     write('Pilih warna kartu yang diinginkan (hijau/kuning/biru/merah): '), 
     read(WarnaNew), 
-    jadiTop(kartu(WarnaNew, _)),
+    discardPile([K|_]),
+    K=kartu(Warna, Jenis), 
+    jadiTop(kartu(WarnaNew, Jenis)),
     write('Kartu paling atas sekarang berwarna '), write(WarnaNew), nl.
 
 efekDrawFour :-  
     currentPlayer(Player),
+    retractall(bisaDitantang(_)),
+    assertz(bisaDitantang(Player)),
     passTurn,
     currentPlayer(NextPlayer),
     nl, write('Giliran '),
@@ -116,6 +122,7 @@ efekDrawFour :-
         ;
         Konfirmasi == tidak
         ->
+        retractall(bisaDitantang(_)),
         ambilKartuUmum(NextPlayer, 4, KartuNew),
         write(NextPlayer),
         write(' mendapatkan 4 kartu.'), nl,

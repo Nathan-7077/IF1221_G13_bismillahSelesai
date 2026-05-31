@@ -12,12 +12,13 @@ lihatCommand:-
     write('3. tantang'), nl,
     write('4. uni'), nl,
     write('5. tangkap'), nl,
-	write('6. sembunyikanKartu'), nl,
-	write('7. tampilkanKartu'), nl,
+	  write('6. sembunyikanKartu'), nl,
+  	write('7. tampilkanKartu'), nl,
     write('Aksi pendukung yang tersedia:'),nl,
     write('1. lihatCommand'),nl,
     write('2. lihatKartu'),nl,
-    write('3. cekInfo'),nl.
+    write('3. cekInfo'),nl,
+    write('4. tangkap(Player)'),nl.
 
 lihatKartu:-
     write('Berikut kartu yang anda miliki'),nl,
@@ -91,39 +92,52 @@ ambilDariHand(NoKartu, [_|T], Temp) :-
     N1 is NoKartu - 1,
     ambilDariHand(N1, T, Temp).
 
-efekJenis(Y) :-
-    Y == reverse,
-    numPlayers(Max), 
-    (Max > 2 ->
-    efekReverse,
-    efekSkip), 
-    !.
-
-efekJenis(Y) :-
-    Y == skip, 
-    efekSkip,
-    !.
-
-efekJenis(Y) :-
-    Y == draw_two, 
-    efekDrawTwo, !.
-
-efekJenis(Y) :-
-    Y == wild, 
-    efekWild, !.
-
-efekJenis(Y) :-
-    Y == wild_draw_four, 
-    efekWild,
-    efekDrawFour, !.
-
-efekJenis(_).
-
 jadiTop(NewTop) :-
     discardPile(OldList),
     retract(discardPile(OldList)),
     NewList = [NewTop|OldList],
     assertz(discardPile(NewList)).
+
+efekJenis(X, Y) :-
+    Y == reverse,
+    numPlayers(Max), 
+    (Max > 2 ->
+    efekReverse
+    ;
+    efekSkip), 
+    jadiTop(kartu(X, Y)),
+    !.
+
+efekJenis(X, Y) :-
+    Y == skip, 
+    efekSkip,
+    jadiTop(kartu(X, Y)),
+    !.
+
+efekJenis(X, Y) :-
+    Y == draw_two, 
+    efekDrawTwo, 
+    jadiTop(kartu(X, Y)),
+    !.
+
+efekJenis(X, Y) :-
+    Y == wild, 
+    efekWild, !.
+
+efekJenis(X, Y) :-
+    Y == wild_draw_four, 
+    efekWild,
+    efekDrawFour, !.
+
+efekJenis(X, Y) :-
+    Y == mimic,
+    efekMimic,
+    efekWild,
+    !.
+
+efekJenis(X, Y) :-
+    jadiTop(kartu(X, Y)), 
+    !.
 
 delete_element([_|Tail], 0, Tail).
 delete_element([Head|Tail], Index, [Head|NewTail]) :-
@@ -145,28 +159,17 @@ mainkanKartu(NoKartu):-
     ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
     (bisaDimainkan(Player, kartu(Warna, Jenis))->
     write(Player), write(' memainkan kartu: '), write(Warna), write('-'), write(Jenis), nl,
-    jadiTop(kartu(Warna, Jenis)),
     buangDariHand(NoKartuRill),
-
-    cards(Player, NewHand),
-    (
-        NewHand = []
-        ->
-        endGame
-        ;
-        efekJenis(Jenis),
-        passTurn,
-        currentPlayer(NextPlayer),
-        write('Giliran '),
-        write(NextPlayer),
-        write('.'),
-        nl,nl
-    ),
-    !
-    ;
-    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl,
+    efekJenis(Warna, Jenis),
+    passTurn,
+    currentPlayer(NextPlayer),
+    write('Giliran '), write(NextPlayer), nl,
     !,
-    fail).
+    fail
+    ;
+    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl, 
+    !,
+    fail). 
 
 /* Mainkan kartu dan uni */
 uni(NoKartu):-
@@ -240,45 +243,63 @@ uni(NoKartu):-
     ).
 
 /*tantang*/
-cekdiLoop(_, []).
-cekdiLoop(Player, [Head|Tail]) :-
-	\+ bisaDimainkan(Player, Head),
-	cekdiLoop(Player, Tail).
+kartuCocokDenganTop(KartuPlayer):-
+    discardPile([K|_]),
+    K=kartu(Warna1, Jenis1),
+    KartuPlayer=kartu(Warna2, Jenis2),
+    (Warna1 == Warna2 ; Jenis1 == Jenis2 ; Warna2 == hitam).
+
+cekdiLoop([]):- !.
+cekdiLoop([Head|Tail]) :-
+	\+ kartuCocokDenganTop(Head),
+	cekdiLoop(Tail).
 
 cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	cards(Player, Hand),
 	getLength(Hand, Length),
 	( 
-		cekdiLoop(Player, Hand)
+		cekdiLoop(Hand)
 			-> Hasil = 1
 			; Hasil = 0
 	).
 
 tantang:-
-    write('Tantangan dilakukan!'), nl,
-    write('Memeriksa kartu '),
-    getBeforePlayer(BeforePlayer),
-    write(BeforePlayer),
-    write('...'), nl,
-    currentPlayer(Player),
-    cekGaAdaKartuYangBisaDimainin(Player, Hasil),
+    discardPile([K|_]),
+    K=kartu(Warna, Jenis),
+    getBeforePlayer(BeforePlayer), 
     (
-        Hasil == 1
+        Jenis == wild_draw_four, bisaDitantang(BeforePlayer)
         ->
-        write('Tantangan gagal.'), nl,
-        ambilKartuUmum(Player, 6, KartuNew),
-        write(Player),
-        write(' mendapatkan 6 kartu penalti.'), nl,
-        write('Kartu yang didapat:'),
-        printAmbilKartu(KartuNew), nl
-        ;
-        write('Tantangan berhasil.'), nl,
-        ambilKartuUmum(BeforePlayer, 4, KartuNew),
+        write('Tantangan dilakukan!'), nl,
+        write('Memeriksa kartu '),
         write(BeforePlayer),
-        write(' mendapatkan 4 kartu penalti.'), nl, nl,
-        write('Kartu yang didapat:'), nl,
-        printAmbilKartu(KartuNew), nl, !
+        write('...'), nl,
+        currentPlayer(Player),
+        cekGaAdaKartuYangBisaDimainin(BeforePlayer, Hasil),
+        (
+            Hasil == 1
+            ->
+            retractall(bisaDitantang(_)),
+            write('Tantangan gagal.'), nl,
+            ambilKartuUmum(Player, 6, KartuNew),
+            write(Player),
+            write(' mendapatkan 6 kartu penalti.'), nl,
+            write('Kartu yang didapat:'),
+            printAmbilKartu(KartuNew), nl, !
+            ;
+            retractall(bisaDitantang(_)),
+            write('Tantangan berhasil.'), nl,
+            ambilKartuUmum(BeforePlayer, 4, KartuNew),
+            write(BeforePlayer),
+            write(' mendapatkan 4 kartu penalti.'), nl, nl,
+            write('Kartu yang didapat:'), nl,
+            printAmbilKartu(KartuNew), nl, !
+        )
+        ;
+        write('Tantang tidak bisa dilakukan.'), nl,
+        write('Pemain sebelumnya tidak mengeluarkan Wild Draw Four.'), nl, !
     ).
+    
 
 /* Tangkap */
 cekKartuTinggalSatu(Player):-
@@ -310,11 +331,11 @@ tangkap(PlayerTuduh):-
 	(
 		cekKartuTinggalSatu(PlayerTuduh), Hasil =:= 1
         ->
-        ambilKartuUmum(PlayerTuduh, 1, _),
+        ambilKartuUmum(PlayerTuduh, 2, _),
         write(PlayerTuduh),
         write(' ditangkap!, kartu '),
         write(PlayerTuduh),
-        write(' bertambah satu'),
+        write(' bertambah dua'),
         !
         ;
         write('Tidak bisa menangkap '),
@@ -324,12 +345,7 @@ tangkap(PlayerTuduh):-
         write(CurrPlayer),
         write(' mendapat 1 kartu penalti'),
         nl,
-        ambilKartuUmum(CurrPlayer, 1, _),
-        passTurn,
-        currentPlayer(NextPlayer),
-        write('Giliran '), 
-        write(NextPlayer), 
-        nl, !
+        ambilKartuUmum(CurrPlayer, 1, _), !
 	).
 /*sembunyikanKartu*/
 sembunyikanKartu(NomorUrut):-
