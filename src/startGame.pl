@@ -122,7 +122,11 @@ inputPlayersLoop(I,N):-
 
 /* Shuffle pemain */
 shufflePlayers:-
-    findall(P,player(P),Players),
+    findKartu(
+        P,
+        player(P),
+        Players
+    ),
     shuffle(Players,Shuffled),
     assignPlayerOrder(Shuffled,1),
 
@@ -157,9 +161,11 @@ writeList([H|T]):-
 /* Distribusi kartu */
 distribusiKartu:-
     distribusiPlayer(1).
+
 distribusiPlayer(I):-
     numPlayers(N),
     I>N,!.
+
 distribusiPlayer(I):-
     playerOrder(I,P),
     findKartu(
@@ -168,8 +174,8 @@ distribusiPlayer(I):-
         SemuaKartu
     ),
     shuffle(SemuaKartu,Shuffled),
-    
-    length(Hand,2),
+
+    length(Hand,7),
     append(Hand,_,Shuffled),
 
     retract(cards(P,_)),
@@ -178,16 +184,17 @@ distribusiPlayer(I):-
 
     I2 is I+1,
     distribusiPlayer(I2).
+
 /* Discard pile */
 inisialisasiDiscardPile :-
     findKartu(
-    kartu(W,J),
-    (
-        warna(W),
-        jenis(J),
-        integer(J)
-    ),
-    Deck
+        kartu(W,J),
+        (
+            warna(W),
+            jenis(J),
+            integer(J)
+        ),
+        Deck
     ),
     getLength(Deck,Len),
     random(0,Len,Indeks),

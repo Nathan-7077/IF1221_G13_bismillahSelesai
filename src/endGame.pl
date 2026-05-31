@@ -1,8 +1,9 @@
 :- dynamic(finalScore/2).
+:- dynamic(tempScore/2).
 
 % tampilan pas endgame
 endGame :-
-    player(Winner), 
+    player(Winner),
     cards(Winner,[]),
     nl,
 
@@ -90,20 +91,24 @@ tampilKartu([kartu(W,J)|T]) :-
 
 % tampilkan ranking
 tampilRanking :-
+    retractall(tempScore(_,_)),
+
+    finalScore(P,S),
+    assertz(tempScore(P,S)),
+    fail.
+
+tampilRanking :-
     nl,
     write('Urutan pemenang:'),
     nl,
 
-    urutanPlayer(1).
+    urutanPlayer(1),
+
+    retractall(tempScore(_,_)).
 
 urutanPlayer(I) :-
-    numPlayers(N),
-    I>N,
-    !.
-
-urutanPlayer(I) :-
-    cariPeringkat(I,Pemain),
-    finalScore(Pemain,Skor),
+    ambilSkorTerkecil(Pemain,Skor),
+    !,
 
     write(I),
     write('. '),
@@ -113,22 +118,21 @@ urutanPlayer(I) :-
     write(' poin)'),
     nl,
 
+    retract(tempScore(Pemain,Skor)),
+
     I2 is I+1,
     urutanPlayer(I2).
 
+urutanPlayer(_).
 
-% cari peringkat pemain
-cariPeringkat(N,Pemain) :-
-    findall(
-        (Skor,Player),
-        finalScore(Player,Skor),
-        List
-    ),
-    sort(List,Sorted),
-    ambilPeringkat(N,Sorted,Pemain).
 
-ambilPeringkat(1,[(_,P)|_],P).
+% cari skor terkecil
+ambilSkorTerkecil(Pemain,Skor) :-
+    tempScore(Pemain,Skor),
+    tidakAdaYangLebihKecil(Skor).
 
-ambilPeringkat(N,[_|T],P) :-
-    N1 is N-1,
-    ambilPeringkat(N1,T,P).
+tidakAdaYangLebihKecil(Skor) :-
+    \+ (
+        tempScore(_,SkorLain),
+        SkorLain < Skor
+    ).

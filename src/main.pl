@@ -6,13 +6,15 @@
 :- initialization(main).
 
 main :-
-    write('\nKetik "mulaiUNI." untuk memulai permainan UNI. \n'),
+    write('\nKetik "startGame." untuk memulai permainan UNI. \n'),
     write('>> '),
     read(Command),
     (
-        Command = mulaiUNI
+        Command = startGame
         ->
         (
+            nl,
+            write('SELAMAT DATANG DI PERMAINAN UNI S1GMA!'), nl,nl,
             startGame
         )
         ;
