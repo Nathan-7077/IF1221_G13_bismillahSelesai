@@ -5,6 +5,7 @@
 :- dynamic(playerOrder/2).
 :- dynamic(numPlayers/1).
 :- dynamic(saidUni/1).
+:- dynamic(kartuHidden/2).
 
 % inisialisasi pemain pertama
 initializeFirstPlayer :-
