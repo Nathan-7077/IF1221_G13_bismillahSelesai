@@ -44,13 +44,13 @@ Program berupa implementasi game bernama “UNI” dengan menggunakan GNU Prolog
 |`mulaiUNI`| Memulai permainan UNI|
 | `lihatCommand` | Menampilkan daftar command |
 | `cekInfo` | Mengecek status aktif permainan |
-| `lihatKartu ` | Membuka halaman berdasarkan URL. |
-| `mainkanKartu` | Membuka tautan dari halaman aktif. |
-| `uni` | Menambahkan halaman baru. |
-| `tantang` | Mengubah halaman web. |
-| `tangkap` | Menghapus halaman web. |
-| `sembunyikanKartu` | Menampilkan history tab aktif. |
-| `tampilkanKartu ` | Kembali ke halaman sebelumnya. |
+| `lihatKartu ` | DDDDDDDD |
+| `mainkanKartu` | DDDDDDDDD |
+| `uni` | DDDDDDDDDD |
+| `tantang` | DDDDDDDDDDD |
+| `tangkap` | DDDDDDDDDDD |
+| `sembunyikanKartu` | DDDDDDDDDDDD |
+| `tampilkanKartu ` | DDDDDDDDDDDD |
 ---
 ## Anggota dan Pembagian Tugas
 |Nama|NIM|Tugas|
