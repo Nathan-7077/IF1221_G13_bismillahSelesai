@@ -88,39 +88,52 @@ ambilDariHand(NoKartu, [_|T], Temp) :-
     N1 is NoKartu - 1,
     ambilDariHand(N1, T, Temp).
 
-efekJenis(Y) :-
-    Y == reverse,
-    numPlayers(Max), 
-    (Max > 2 ->
-    efekReverse,
-    efekSkip), 
-    !.
-
-efekJenis(Y) :-
-    Y == skip, 
-    efekSkip,
-    !.
-
-efekJenis(Y) :-
-    Y == draw_two, 
-    efekDrawTwo, !.
-
-efekJenis(Y) :-
-    Y == wild, 
-    efekWild, !.
-
-efekJenis(Y) :-
-    Y == wild_draw_four, 
-    efekWild,
-    efekDrawFour, !.
-
-efekJenis(_).
-
 jadiTop(NewTop) :-
     discardPile(OldList),
     retract(discardPile(OldList)),
     NewList = [NewTop|OldList],
     assertz(discardPile(NewList)).
+
+efekJenis(X, Y) :-
+    Y == reverse,
+    numPlayers(Max), 
+    (Max > 2 ->
+    efekReverse
+    ;
+    efekSkip), 
+    jadiTop(kartu(X, Y)),
+    !.
+
+efekJenis(X, Y) :-
+    Y == skip, 
+    efekSkip,
+    jadiTop(kartu(X, Y)),
+    !.
+
+efekJenis(X, Y) :-
+    Y == draw_two, 
+    efekDrawTwo, 
+    jadiTop(kartu(X, Y)),
+    !.
+
+efekJenis(X, Y) :-
+    Y == wild, 
+    efekWild, !.
+
+efekJenis(X, Y) :-
+    Y == wild_draw_four, 
+    efekWild,
+    efekDrawFour, !.
+
+efekJenis(X, Y) :-
+    Y == mimic,
+    efekMimic,
+    efekWild,
+    !.
+
+efekJenis(X, Y) :-
+    jadiTop(kartu(X, Y)), 
+    !.
 
 delete_element([_|Tail], 0, Tail).
 delete_element([Head|Tail], Index, [Head|NewTail]) :-
@@ -142,28 +155,17 @@ mainkanKartu(NoKartu):-
     ambilDariHand(NoKartuRill, Hand, kartu(Warna, Jenis)),
     (bisaDimainkan(Player, kartu(Warna, Jenis))->
     write(Player), write(' memainkan kartu: '), write(Warna), write('-'), write(Jenis), nl,
-    jadiTop(kartu(Warna, Jenis)),
     buangDariHand(NoKartuRill),
-
-    cards(Player, NewHand),
-    (
-        NewHand = []
-        ->
-        endGame
-        ;
-        efekJenis(Jenis),
-        passTurn,
-        currentPlayer(NextPlayer),
-        write('Giliran '),
-        write(NextPlayer),
-        write('.'),
-        nl,nl
-    ),
-    !
-    ;
-    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl,
+    efekJenis(Warna, Jenis),
+    passTurn,
+    currentPlayer(NextPlayer),
+    write('Giliran '), write(NextPlayer), nl,
     !,
-    fail).
+    fail
+    ;
+    write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl, 
+    !,
+    fail). 
 
 /* Mainkan kartu dan uni */
 uni(NoKartu):-
