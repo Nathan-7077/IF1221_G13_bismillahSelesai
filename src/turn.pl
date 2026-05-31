@@ -131,8 +131,8 @@ efekJenis(Y) :-
 
 efekJenis(Y) :-
     Y == mimic,
-    efekMimic,
     efekWild,
+    efekMimic,
     !.
 
 efekJenis(Y).
