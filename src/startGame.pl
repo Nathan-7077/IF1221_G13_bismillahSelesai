@@ -50,7 +50,7 @@ startGame:-
     currentPlayer(First),
     write('Giliran '),
     write(First),
-    write('.'),
+    write('.'), nl,
     nl.
 
 /* Inisialisasi Pemain */
@@ -63,7 +63,7 @@ inisialisasiPlayer:-
 
 /* Validasi jumlah pemain */
 inputNumPlayersValid:-
-
+    nl,
     write('Masukkan jumlah pemain: '),
     read(N),
     (
@@ -169,11 +169,12 @@ distribusiPlayer(I):-
     ),
     shuffle(SemuaKartu,Shuffled),
     
-    length(Hand,7),
+    length(Hand,2),
     append(Hand,_,Shuffled),
 
     retract(cards(P,_)),
     assertz(cards(P,Hand)),
+    
 
     I2 is I+1,
     distribusiPlayer(I2).
