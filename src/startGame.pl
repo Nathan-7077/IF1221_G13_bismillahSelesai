@@ -175,7 +175,7 @@ distribusiPlayer(I):-
     ),
     shuffle(SemuaKartu,Shuffled),
 
-    length(Hand,2),
+    length(Hand,24),
     append(Hand,_,Shuffled),
 
     retract(cards(P,_)),
