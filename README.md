@@ -29,7 +29,7 @@ gprolog --consult-file src/main.pl
 ### Memulai Permainan
 Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 ```prolog
-| ?- startGame.
+| ?- mulaiUNI.
 ```
 ## Struktur Repository
 ```text
