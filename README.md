@@ -10,6 +10,7 @@
 ---
 ## Gambaran Singkat
 Program berupa implementasi game bernama “UNI” dengan menggunakan GNU Prolog. Implementasi yang dibuat mengandung berbagai materi prolog yang telah diajarkan seperti deklarasi fakta dan rules, rekursi, list, file eksternal, penggunaan cut dan fail, dan materi-materi lain yang telah diajarkan di kelas Logika Komputasional IF1221.	
+
 ---
 ## Cara Menjalankan Program
 ### Prasyarat:  
