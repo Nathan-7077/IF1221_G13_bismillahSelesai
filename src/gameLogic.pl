@@ -94,8 +94,10 @@ efekSkip :-
 efekDrawTwo :-
     passTurn,
     currentPlayer(NextPlayer),
-    ambilKartuUmum(NextPlayer, 2, _),
-    write('Pemain  '), write(NextPlayer), write(' mengambil dua kartu'), nl.
+    ambilKartuUmum(NextPlayer, 2, KartuNew),
+    write(NextPlayer), write(' mendapatkan 2 kartu.'), nl,
+    write('Kartu yang didapat:'), nl,
+    printAmbilKartu(KartuNew), nl.
 
 efekWild :- 
     write('Pilih warna kartu yang diinginkan (hijau/kuning/biru/merah): '), 

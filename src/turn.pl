@@ -168,12 +168,10 @@ mainkanKartu(NoKartu):-
     passTurn,
     currentPlayer(NextPlayer),
     write('Giliran '), write(NextPlayer), nl,
-    !,
-    fail
+    !
     ;
     write('Kartu tidak bisa dimainkan, ulangi atau ambil kartu.'), nl, 
-    !,
-    fail). 
+    !). 
 
 /* Mainkan kartu dan uni */
 uni(NoKartu):-
