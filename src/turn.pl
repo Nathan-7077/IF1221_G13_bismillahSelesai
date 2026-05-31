@@ -9,14 +9,14 @@ lihatCommand:-
     write('3. tantang'), nl,
     write('4. uni'), nl,
     write('5. tangkap'), nl,
-	  write('6. sembunyikanKartu'), nl,
-  	write('7. tampilkanKartu'), nl,
+	write('6. sembunyikanKartu'), nl,
+  	
     write('Aksi pendukung yang tersedia:'),nl,
     write('1. lihatCommand'),nl,
     write('2. lihatKartu'),nl,
     write('3. cekInfo'),nl,
-    write('4. tangkap(Player)'),nl.
-
+	write('4. tampilkanKartu'), nl.
+	
 lihatKartu:-
     write('Berikut kartu yang anda miliki'),nl,
     currentPlayer(Player),!,
