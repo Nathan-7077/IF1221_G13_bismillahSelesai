@@ -1,6 +1,4 @@
 :-include('gameLogic.pl').
-:-include('utils.pl').
-
 :- dynamic(playerBilangUni/1).
 
 /*Yang tentang info2 dalam game*/
