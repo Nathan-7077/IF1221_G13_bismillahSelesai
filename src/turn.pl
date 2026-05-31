@@ -40,8 +40,7 @@ printUrutan([H|T]) :-
 
 infoPemain([],[],_):-!.
 infoPemain([H|T],[A|B], Indeks) :-
-    hitungKartu(A, JumlahHand),
-    (kartuHidden(H,_)->Jumlah is JumlahHand+1;Jumlah is JumlahHand),
+    hitungKartu(A, Jumlah),
     write('Nama Pemain '), write(Indeks), write(': '), write(H), nl,
     write('Jumlah Kartu : '), write(Jumlah), nl,nl,
     Indeks2 is Indeks+1,
