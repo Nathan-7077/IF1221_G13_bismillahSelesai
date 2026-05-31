@@ -164,7 +164,7 @@ mainkanKartu(NoKartu):-
     buangDariHand(NoKartuRill),
     retractall(kartuHidden(Player, kartu(Warna, Jenis))),
     jadiTop(kartu(Warna, Jenis)),
-
+    efekJenis(Jenis),
     (
         cards(Player,[])
         ->

@@ -15,12 +15,12 @@ main :-
         (
             nl,
             write('SELAMAT DATANG DI PERMAINAN UNI S1GMA!'), nl,nl,
-            startGame
+            startGame, !
         )
         ;
         Command = exit
         ->
-        halt
+        halt, !
         ;
         write('Command tidak valid!'),
         nl,
