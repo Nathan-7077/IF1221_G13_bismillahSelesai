@@ -72,7 +72,7 @@ efekTerakhir([kartu(_, Jenis)|Tail], Hasil) :-
     fail
     ;
     Jenis == skip ->
-    efekJenis, !, 
+    efekSkip, !, 
     Hasil = 1,
     fail
     ;
@@ -115,8 +115,8 @@ efekDrawFour :-
     passTurn,
     currentPlayer(NextPlayer),
     nl, write('Giliran '),
-    write(NextPlayer), nl,
-    write('Tantang '), write(Player), write(' (ya/yidak)? '),
+    write(NextPlayer), nl, nl,
+    write('Tantang '), write(Player), write(' (ya/tidak)? '),
     read(Konfirmasi),
     (
         Konfirmasi == ya
@@ -127,10 +127,10 @@ efekDrawFour :-
         ->
         retractall(bisaDitantang(_)),
         ambilKartuUmum(NextPlayer, 4, KartuNew),
-        write(NextPlayer),
+        nl, write(NextPlayer),
         write(' mendapatkan 4 kartu.'), nl,
         write('Kartu yang didapat:'), nl,
-        printAmbilKartu(KartuNew), nl
+        printAmbilKartu(KartuNew)
     ).
     
 

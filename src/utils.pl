@@ -25,7 +25,7 @@ ambilHasilHelper(List,List).
 lihatKartuTop:-
     discardPile([K|_]),
     K=kartu(Warna, Jenis), 
-    write('Kartu top : '),
+    nl, write('Kartu top : '),
     write(Warna),
     write('-'),
     write(Jenis).
