@@ -69,17 +69,17 @@ efekTerakhir([kartu(_, Jenis)|Tail], Hasil) :-
     (Jenis == reverse ->
     efekReverse, 
     Hasil = 1,
-    fail
+    ! 
     ;
     Jenis == skip ->
-    efekSkip, !, 
+    efekSkip, 
     Hasil = 1,
-    fail
+    !
     ;
     Jenis == draw_two ->
-    efekDrawTwo, !, 
+    efekDrawTwo,
     Hasil = 1,
-    fail
+    !
     ;
     efekTerakhir(Tail, Hasil)).
 

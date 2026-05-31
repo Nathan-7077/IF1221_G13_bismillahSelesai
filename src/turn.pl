@@ -100,45 +100,42 @@ jadiTop(NewTop) :-
     NewList = [NewTop|OldList],
     assertz(discardPile(NewList)).
 
-efekJenis(X, Y) :-
+efekJenis(Y) :-
     Y == reverse,
     numPlayers(Max), 
     (Max > 2 ->
     efekReverse
     ;
-    efekSkip),
+    efekSkip), 
     !.
 
-efekJenis(X, Y) :-
+efekJenis(Y) :-
     Y == skip, 
     efekSkip,
-    jadiTop(kartu(X, Y)),
     !.
 
-efekJenis(X, Y) :-
+efekJenis(Y) :-
     Y == draw_two, 
-    efekDrawTwo,
+    efekDrawTwo, 
     !.
 
-efekJenis(X, Y) :-
+efekJenis(Y) :-
     Y == wild, 
     efekWild, !.
 
-efekJenis(X, Y) :-
+efekJenis(Y) :-
     Y == wild_draw_four, 
     efekWild,
     efekDrawFour,
     !.
 
-efekJenis(X, Y) :-
+efekJenis(Y) :-
     Y == mimic,
     efekMimic,
     efekWild,
     !.
 
-efekJenis(X, Y) :-
-    jadiTop(kartu(X, Y)), 
-    !.
+efekJenis(Y).
 
 delete_element([_|Tail], 0, Tail).
 delete_element([Head|Tail], Index, [Head|NewTail]) :-
@@ -275,7 +272,7 @@ cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	).
 
 tantang:-
-    discardPile([K|_]),
+    discardPile([_, K|_]),
     K=kartu(Warna, Jenis),
     getBeforePlayer(BeforePlayer), 
     (
