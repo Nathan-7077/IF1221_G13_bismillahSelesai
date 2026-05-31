@@ -100,7 +100,7 @@ tampilRanking :-
 tampilRanking :-
     nl,
     write('Urutan pemenang:'),
-    nl,
+    nl, nl,
 
     urutanPlayer(1),
 
