@@ -5,12 +5,12 @@
 
 kartuValid(kartu(hitam, wild),_).
 kartuValid(kartu(hitam, wild_draw_four), _).
-kartuValid(kartu(hitam, mimic), _). Nyiapin doang buat entar
+kartuValid(kartu(hitam, mimic), _). 
 kartuValid(kartu(Color, _), kartu(Color, _)):-
     Color\=hitam.
 kartuValid(kartu(_, Type), kartu(_, Type)):-
     Type \=wild,
-    Type \= wild_draw_four.
+    Type \= wild_draw_four,
     Type \= mimic.
 %Cek WDF kuilangin, soalnya ternyata bisa dimainkan, cuma kalau dimainkan pemain selanjutnya bisa nantang (sebelumnya di startGame tulisannya gabisa soalnya, baru ngecek td di kelas alpro ternyata dibutuhin buat mekanik tantang)
 bisaDimainkan(Player, Card):-
@@ -47,6 +47,7 @@ helperAmbil(N, [H|T], [H|Sisa]):-
         N1 is N-1,
         helperAmbil(N1, T, Sisa).
 
+/* Handle Effect */
 balikUrutan(Max, Max) :-
     playerOrder(Max, Current),
     !,
@@ -63,10 +64,10 @@ balikUrutan(Index1, Max) :-
     NextIndex is Index1 + 1,
     balikUrutan(NextIndex, Max).
 
-efekTerakhir([], Hasil) :- Hasil = 0.
+efekTerakhir([], 0).
 efekTerakhir([kartu(_, Jenis)|Tail], Hasil) :-
     (Jenis == reverse ->
-    efekReverse, !, 
+    efekReverse, 
     Hasil = 1,
     fail
     ;
@@ -80,7 +81,7 @@ efekTerakhir([kartu(_, Jenis)|Tail], Hasil) :-
     Hasil = 1,
     fail
     ;
-    efekTerakhir(Tail)).
+    efekTerakhir(Tail, Hasil)).
 
 efekReverse :- 
     numPlayers(Max),
@@ -138,56 +139,3 @@ efekMimic :-
     efekTerakhir(Discard, Hasil), 
     (Hasil == 1 ->
     write('Efek mimic aktif'), nl).
-
-/*Handle Effect*/
-/* balik(List, Hasil) :- 
-    balik(List, [], Hasil).
-
-balik([], B, B).
-balik([H|T], B, Hasil) :- 
-    balik(T, [H|B], Hasil). */
-
-/* balikUrutan(Max, Max) :-
-    playerOrder(Max, Current),
-    !,
-    retract(playerOrder(Max, Current)),
-    assertz(playerOrder(1, Current)).
-
-balikUrutan(Index1, Max) :- 
-    Index1 < Max, 
-    N is Max - Index1 + 1,
-    playerOrder(Index1, Current),
-    !,
-    retract(playerOrder(Index1, Current)),
-    assertz(playerOrder(N, Current)),
-    NextIndex is Index1 + 1,
-    balikUrutan(NextIndex, Max).
-
-
-efekReverse :- 
-    numPlayers(Max),
-    balikUrutan(1, Max),
-    write('Urutan pemain dibalik!'), nl.
-
-efekSkip :- 
-    passTurn,
-    write('Pemain berikutnya kehilangan giliran'), nl.
-
-efekDrawTwo :-
-    currentPlayer(Current),
-    getNextPlayer(Current, NextPlayer),
-    ambilKartuUmum(NextPlayer, 2, _),
-    efekSkip.
-
-efekWild :- 
-    write('Pilih warna kartu yang diinginkan: '), 
-    read(WarnaNew), 
-    discardPile([kartu(_, Jenis)|_]),
-    jadiTop(kartu(WarnaNew, Jenis)),
-    write('Kartu paling atas sekarang berwarna '), write(WarnaNew).
-
-efekDrawFour :-
-    currentPlayer(Current),
-    getNextPlayer(Current, NextPlayer),
-    ambilKartuUmum(NextPlayer, 4, _),
-    efekSkip. */
