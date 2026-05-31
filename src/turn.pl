@@ -24,7 +24,7 @@ lihatKartu:-
     helperLihat(Hand, 1),
 	tampilkanHidden(Player, Hand).
 tampilkanHidden(Player, Hand):-
-	(kartuHidden(Player, Kartu),!,
+	kartuHidden(Player, Kartu),!,
 	Kartu= kartu(W,J),
 	getLength(Hand, Len),
 	Nomor is Len+1,
