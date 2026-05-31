@@ -369,7 +369,8 @@ sembunyikanKartu(NomorUrut):-
     assertz(kartuHidden(Player, Kartu)),
     Kartu=kartu(Warna, Jenis),
     write('kartu '), write(Warna), write('-'), write(Jenis), write(' berhasil disembunyikan.'),nl,
-    getNextPlayer(Player, NextPlayer),
+	passTurn,
+    currentPlayer(NextPlayer),
     write('Giliran '), write(NextPlayer), write('.'), nl,!.
 sembunyikanKartu(_):-
     write('Gagal menyembunyikan kartu'),nl.
