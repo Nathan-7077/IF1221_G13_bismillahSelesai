@@ -1,16 +1,17 @@
-
+---
 # IF1221 - Tugas Besar Logika Komputasional
-
+---
 ## Daftar Isi
 - [Gambaran Singkat](#gambaran-singkat)
 - [Cara Menjalankan Program](#cara-menjalankan-program)
 - [Struktur Repository](#struktur-repository)
 - [Daftar Fitur Utama](#daftar-fitur-utama)
 - [Anggota dan Pembagian Tugas](#anggota-dan-pembagian-tugas)
-
+---
 ## Gambaran Singkat
 Program berupa implementasi game bernama “UNI” dengan menggunakan GNU Prolog. Implementasi yang dibuat mengandung berbagai materi prolog yang telah diajarkan seperti deklarasi fakta dan rules, rekursi, list, file eksternal, penggunaan cut dan fail, dan materi-materi lain yang telah diajarkan di kelas Logika Komputasional IF1221.	
 
+---
 ## Cara Menjalankan Program
 ### Prasyarat:  
    - Telah menginstall [GNU Prolog](http://www.gprolog.org/#download).
@@ -29,8 +30,9 @@ gprolog --consult-file src/main.pl
 ### Memulai Permainan
 Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 ```prolog
-| ?- mulaiUNI.
+| ?- startGame.
 ```
+---
 ## Struktur Repository
 ```text
 .
@@ -51,6 +53,7 @@ Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 │
 └── README.md               # Dokumentasi Projek
 ```
+---
 ## Daftar Fitur Utama
 | Command | Deskripsi |
 |---|---|

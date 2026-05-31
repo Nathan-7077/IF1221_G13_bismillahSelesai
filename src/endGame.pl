@@ -59,6 +59,8 @@ hitungPoin([K|T],Total) :-
 
 
 % nilai tiap kartu
+nilaiKartu(kartu(_,0),1).
+
 nilaiKartu(kartu(_,Angka),Angka):-
     integer(Angka).
 
