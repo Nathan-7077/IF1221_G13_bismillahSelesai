@@ -68,9 +68,8 @@ Setelah program berjalan, ketik perintah berikut di prompt `| ?-`:
 ## Anggota dan Pembagian Tugas
 |Nama|NIM|Tugas|
 |---|---|---|
-|Faishal Ahmad Nurdin|13525027 |gameLogic.pl, turn.pl, mimic card, card.pl, pengerjaan laporan bab 2 |
-|Aditya Rasyid|13525039|startGame.pl, card.pl, player.pl, endGame.pl, saveAndLoad.pl, pengerjaan laporan bab 3
-|
-|Nathaniel Marvelo|13525107 |startGame.pl, gameLogic.pl, turn.pl, sembunyikanKartu, README.md, pengerjaan laporan bab 1|
-|Abdur Rauuf Fawaaz|13525117|main.pl, turn.pl, gameLogic.pl, pengerjaan laporan bab 3|
+|Faishal Ahmad Nurdin|13525027 | gameLogic.pl, turn.pl, mimic card, card.pl, pengerjaan laporan bab 2 |
+|Aditya Rasyid| 13525039|startGame.pl, card.pl, player.pl, endGame.pl, saveAndLoad.pl, pengerjaan laporan bab 3 |
+|Nathaniel Marvelo|13525107 | startGame.pl, gameLogic.pl, turn.pl, sembunyikanKartu, README.md, pengerjaan laporan bab 1 |
+|Abdur Rauuf Fawaaz|13525117| main.pl, turn.pl, gameLogic.pl, pengerjaan laporan bab 3 |
 ---
