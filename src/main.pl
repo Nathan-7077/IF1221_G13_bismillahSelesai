@@ -6,7 +6,7 @@
 :- initialization(main).
 
 main :-
-    write('\n Ketik "mulaiUNI." untuk memulai permainan UNI. \n'),
+    write('\nKetik "mulaiUNI." untuk memulai permainan UNI. \n'),
     write('>> '),
     read(Command),
     (
