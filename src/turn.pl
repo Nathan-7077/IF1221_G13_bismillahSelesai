@@ -7,13 +7,15 @@
 /*Yang tentang info2 dalam game*/
 lihatCommand:-
     write('Aksi utama yang tersedia:'),nl,
-    write('1. ambilKartu'), nl,
-    write('2. tantang'), nl,
+    write('1. mainkanKartu(NoKartu)'), nl,
+    write('2. ambilKartu'), nl,
+    write('3. uni(NoKartu)'), nl,
     nl,
     write('Aksi pendukung yang tersedia:'),nl,
     write('1. lihatCommand'),nl,
     write('2. lihatKartu'),nl,
-    write('3. cekInfo'),nl.
+    write('3. cekInfo'),nl,
+    write('4. tangkap(Player)'),nl.
 
 lihatKartu:-
     write('Berikut kartu yang anda miliki'),nl,
@@ -235,45 +237,63 @@ uni(NoKartu):-
     ).
 
 /*tantang*/
-cekdiLoop(_, []).
-cekdiLoop(Player, [Head|Tail]) :-
-	\+ bisaDimainkan(Player, Head),
-	cekdiLoop(Player, Tail).
+kartuCocokDenganTop(KartuPlayer):-
+    discardPile([K|_]),
+    K=kartu(Warna1, Jenis1),
+    KartuPlayer=kartu(Warna2, Jenis2),
+    (Warna1 == Warna2 ; Jenis1 == Jenis2 ; Warna2 == hitam).
+
+cekdiLoop([]):- !.
+cekdiLoop([Head|Tail]) :-
+	\+ kartuCocokDenganTop(Head),
+	cekdiLoop(Tail).
 
 cekGaAdaKartuYangBisaDimainin(Player, Hasil):-
 	cards(Player, Hand),
 	getLength(Hand, Length),
 	( 
-		cekdiLoop(Player, Hand)
+		cekdiLoop(Hand)
 			-> Hasil = 1
 			; Hasil = 0
 	).
 
 tantang:-
-    write('Tantangan dilakukan!'), nl,
-    write('Memeriksa kartu '),
-    getBeforePlayer(BeforePlayer),
-    write(BeforePlayer),
-    write('...'), nl,
-    currentPlayer(Player),
-    cekGaAdaKartuYangBisaDimainin(Player, Hasil),
+    discardPile([K|_]),
+    K=kartu(Warna, Jenis),
+    getBeforePlayer(BeforePlayer), 
     (
-        Hasil == 1
+        Jenis == wild_draw_four, bisaDitantang(BeforePlayer)
         ->
-        write('Tantangan gagal.'), nl,
-        ambilKartuUmum(Player, 6, KartuNew),
-        write(Player),
-        write(' mendapatkan 6 kartu penalti.'), nl,
-        write('Kartu yang didapat:'),
-        printAmbilKartu(KartuNew), nl
-        ;
-        write('Tantangan berhasil.'), nl,
-        ambilKartuUmum(BeforePlayer, 4, KartuNew),
+        write('Tantangan dilakukan!'), nl,
+        write('Memeriksa kartu '),
         write(BeforePlayer),
-        write(' mendapatkan 4 kartu penalti.'), nl, nl,
-        write('Kartu yang didapat:'), nl,
-        printAmbilKartu(KartuNew), nl, !
+        write('...'), nl,
+        currentPlayer(Player),
+        cekGaAdaKartuYangBisaDimainin(BeforePlayer, Hasil),
+        (
+            Hasil == 1
+            ->
+            retractall(bisaDitantang(_)),
+            write('Tantangan gagal.'), nl,
+            ambilKartuUmum(Player, 6, KartuNew),
+            write(Player),
+            write(' mendapatkan 6 kartu penalti.'), nl,
+            write('Kartu yang didapat:'),
+            printAmbilKartu(KartuNew), nl, !
+            ;
+            retractall(bisaDitantang(_)),
+            write('Tantangan berhasil.'), nl,
+            ambilKartuUmum(BeforePlayer, 4, KartuNew),
+            write(BeforePlayer),
+            write(' mendapatkan 4 kartu penalti.'), nl, nl,
+            write('Kartu yang didapat:'), nl,
+            printAmbilKartu(KartuNew), nl, !
+        )
+        ;
+        write('Tantang tidak bisa dilakukan.'), nl,
+        write('Pemain sebelumnya tidak mengeluarkan Wild Draw Four.'), nl, !
     ).
+    
 
 /* Tangkap */
 cekKartuTinggalSatu(Player):-
@@ -295,11 +315,11 @@ tangkap(PlayerTuduh):-
 	(
 		cekKartuTinggalSatu(PlayerTuduh), Hasil =:= 1
         ->
-        ambilKartuUmum(PlayerTuduh, 1, _),
+        ambilKartuUmum(PlayerTuduh, 2, _),
         write(PlayerTuduh),
         write(' ditangkap!, kartu '),
         write(PlayerTuduh),
-        write(' bertambah satu'),
+        write(' bertambah dua'),
         !
         ;
         write('Tidak bisa menangkap '),
@@ -309,10 +329,5 @@ tangkap(PlayerTuduh):-
         write(CurrPlayer),
         write(' mendapat 1 kartu penalti'),
         nl,
-        ambilKartuUmum(CurrPlayer, 1, _),
-        passTurn,
-        currentPlayer(NextPlayer),
-        write('Giliran '), 
-        write(NextPlayer), 
-        nl, !
+        ambilKartuUmum(CurrPlayer, 1, _), !
 	).
