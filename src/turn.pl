@@ -22,7 +22,8 @@ lihatKartu:-
     currentPlayer(Player),!,
     cards(Player, Hand),
     helperLihat(Hand, 1),
-	(kartuHidden(Player, Kartu(W,J))->
+	(kartuHidden(Player, Kartu)->
+	Kartu= kartu(W,J),
 	getLength(Hand, Len),
 	Nomor is Len+1,
 	write(Nomor), write('. '), write(W), write('-'), write (J), write(' (Tersembunyi)'),nl;true).
@@ -384,6 +385,6 @@ tampilkanKartu:-
 	assertz(cards(Player, HandBaru)),
 	Kartu=kartu(Warna, Jenis),
 	write('Kartu tersembunyi '), write(Warna), write('-'), write(Jenis),
-	write('dikembalikan ke tangan '), write(Player), write('.'), nl,!.
+	write(' dikembalikan ke tangan '), write(Player), write('.'), nl,!.
 tampilkanKartu:-
     write('Gagal menampilkan kartu tersembunyi.'),nl.
