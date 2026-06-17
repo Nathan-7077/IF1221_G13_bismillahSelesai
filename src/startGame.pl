@@ -40,7 +40,8 @@ startGame:-
     retractall(numPlayers(_)),
     retractall(discardPile(_)),
     retractall(gameStarted),
-
+    retractall(kartuHidden(_,_)),
+    
     inisialisasiPlayer,
     distribusiKartu,
     write('Setiap pemain mendapatkan 7 kartu acak.'),nl,nl,
