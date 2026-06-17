@@ -1,10 +1,10 @@
-saveGame:-
+saveGame :-
     gameStarted,
     nl,
-
-    write('Masukkan nama file penyimpanan (gunakan petik dan akhiri dengan .pl, contoh: ''permainan1.pl''): '),
-    read(FileName),
-
+    write('Masukkan nama file penyimpanan (contoh: permainan1): '),
+    nl,
+    read(BaseName),
+    atom_concat(BaseName, '.pl', FileName),
     tell(FileName),
     listing(player),
     listing(cards),
@@ -16,7 +16,6 @@ saveGame:-
     listing(gameStarted),
     listing(kartuHidden),
     told,
-
     nl,
     write('Status permainan berhasil disimpan ke '),
     write(FileName),
@@ -24,40 +23,35 @@ saveGame:-
     nl,
     !.
 
-saveGame:-
+saveGame :-
     nl,
     write('Belum ada permainan yang berjalan.'),
     nl.
 
 
-loadGame:-
-
+loadGame :-
     nl,
-    write('Masukkan nama file yang akan dimuat (gunakan petik dan akhiri dengan .pl, contoh: ''permainan1.pl''): '),
-    read(FileName),
-
+    write('Masukkan nama file yang akan dimuat (contoh: permainan1): '),
+    nl,
+    read(BaseName),
+    atom_concat(BaseName, '.pl', FileName),
     retractall(player(_)),
-    retractall(cards(_,_)),
-    retractall(points(_,_)),
+    retractall(cards(_, _)),
+    retractall(points(_, _)),
     retractall(currentPlayer(_)),
-    retractall(playerOrder(_,_)),
+    retractall(playerOrder(_, _)),
     retractall(numPlayers(_)),
     retractall(discardPile(_)),
-    retractall(gameStarted),
-    retractall(finalScore(_,_)),
-    retractall(kartuHidden(_,_)),
-
+    retractall(finalScore(_, _)),
+    retractall(kartuHidden(_, _)),
     consult(FileName),
-
     nl,
     write('Status permainan berhasil dimuat dari '),
     write(FileName),
     write('.'),
     nl,
-
     currentPlayer(Player),
-
     write('Melanjutkan giliran '),
     write(Player),
     write('.'),
-    nl,nl.
+    nl, nl.

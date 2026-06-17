@@ -22,6 +22,20 @@ endGame :-
     nl,
     !.
 
+endGame :-
+    nl,
+    write('Permainan dihentikan secara manual.'),
+    nl, nl,
+    hitungSemuaPoin,
+    tampilRanking,
+    nl,
+    ambilSkorTerkecil(Pemenang, _),
+    write('Selamat, '),
+    write(Pemenang),
+    write(' menjadi pemenang dengan poin terkecil!'),
+    nl,
+    !.
+
 % output poin pemain
 hitungSemuaPoin :-
     retractall(finalScore(_,_)),
